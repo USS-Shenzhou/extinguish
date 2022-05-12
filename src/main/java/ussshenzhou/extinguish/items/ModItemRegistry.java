@@ -9,9 +9,10 @@ import ussshenzhou.extinguish.Extinguish;
 /**
  * @author Tony Yu
  */
-public class ItemRegistry {
+public class ModItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Extinguish.MOD_ID);
 
-    //public static final RegistryObject<Item> TEST = ITEMS.register("test",()->new Item(new Item.Properties()));
-    //public static Item i = TEST.get();
+    public static final RegistryObject<Item> FIRE_EXTINGUISHER_CO2 = ITEMS.register("extinguisher_co2",FireExtinguisherCo2::new);
+    public static final RegistryObject<Item> FIRE_EXTINGUISHER_WATER = ITEMS.register("extinguisher_water",FireExtinguisherWater::new);
+    public static final RegistryObject<Item> FIRE_EXTINGUISHER_DRY = ITEMS.register("extinguisher_dry",FireExtinguisherDry::new);
 }
