@@ -17,8 +17,6 @@ import ussshenzhou.extinguish.util.ModItemGroups;
  */
 public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
-    //private int damageBuffer;
-    //private boolean using = false;
 
     public AbstractFireExtinguisher(int maxTime) {
         super(new Properties()
@@ -27,10 +25,6 @@ public abstract class AbstractFireExtinguisher extends Item {
                 .durability(maxTime)
         );
         this.maxTime = maxTime;
-    }
-
-    public boolean isUsing(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("using");
     }
 
     @Override
