@@ -151,7 +151,7 @@
 			"translation": [0, -2, -4.5]
 		},
 		"firstperson_righthand": {
-			"translation": [1.75, -2.25, 0]
+			"translation": [1.75, -2.5, 0]
 		},
 		"firstperson_lefthand": {
 			"translation": [0, -3, 0]

@@ -1,0 +1,17 @@
+{
+  "textures": [
+    "minecraft:glow",
+    "minecraft:glow",
+
+    "extinguish:dry1",
+    "extinguish:dry1",
+    "extinguish:dry1",
+    "extinguish:dry1",
+
+    "extinguish:dry2",
+    "extinguish:dry3",
+    "extinguish:dry4",
+    "extinguish:dry5",
+    "extinguish:dry6"
+  ]
+}

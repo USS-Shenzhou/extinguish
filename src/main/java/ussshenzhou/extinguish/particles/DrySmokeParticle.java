@@ -1,0 +1,162 @@
+package ussshenzhou.extinguish.particles;
+
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.*;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+/**
+ * @author Tony Yu
+ */
+public class DrySmokeParticle extends TextureSheetParticle {
+    private final SpriteSet sprites;
+    private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
+    private boolean bouncedOnce = false;
+
+    protected DrySmokeParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
+        super(level, x, y, z, vx, vy, vz);
+        this.xd = vx;
+        this.yd = vy;
+        this.zd = vz;
+        this.friction = 0.93f;
+        this.hasPhysics = true;
+        this.gravity = 0.2f;
+        this.lifetime = (int) (20 * 20 + Math.random() * 20 * 5);
+        this.setAlpha((float) (0.9 + Math.random() * 0.1));
+        float f = 1.0F - (float) (Math.random() * (double) 0.2F);
+        this.setColor(f, f, f);
+        this.sprites = pSprites;
+        this.setSpriteFromAge(pSprites);
+        this.scale((float) (0.6 + Math.random() * 0.6));
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    }
+
+    @Override
+    public void tick() {
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age++ >= this.lifetime) {
+            this.remove();
+        } else {
+            this.yd -= 0.04D * (double) this.gravity;
+            this.move(this.xd, this.yd, this.zd);
+            if (this.speedUpWhenYMotionIsBlocked && this.y == this.yo) {
+                this.xd *= 1.1D;
+                this.zd *= 1.1D;
+            }
+
+            this.xd *= (double) this.friction;
+            this.yd *= (double) this.friction;
+            this.zd *= (double) this.friction;
+
+            if (this.onGround) {
+                this.xd *= (double) 0.8F;
+                this.zd *= (double) 0.8F;
+            }
+
+        }
+    }
+
+    @Override
+    public void move(double pX, double pY, double pZ) {
+        double dx = pX;
+        double dy = pY;
+        double dz = pZ;
+        double r2 = pX * pX + pY * pY + pZ * pZ;
+        if (this.hasPhysics && (pX != 0.0D || pY != 0.0D || pZ != 0.0D) && r2 < MAXIMUM_COLLISION_VELOCITY_SQUARED) {
+            Vec3 vec3 = Entity.collideBoundingBox((Entity) null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
+            pX = vec3.x;
+            pY = vec3.y;
+            pZ = vec3.z;
+        }
+        if (pX != 0.0D || pY != 0.0D || pZ != 0.0D) {
+            this.setBoundingBox(this.getBoundingBox().move(pX, pY, pZ));
+            this.setLocationFromBoundingbox();
+        }
+        //hit XOZ
+        if (dy != pY) {
+            //only bounce once, then fall and stick to ground.
+            if (!bouncedOnce) {
+                Vec2 v = spreadOnCollision(r2, this.xd, this.zd);
+                this.xd = v.x;
+                this.yd = -dy * (0.3 + Math.random() * 0.6);
+                this.zd = v.y;
+                bouncedOnce = true;
+            } else {
+                this.onGround = true;
+                this.gravity = 0;
+            }
+            return;
+        }
+        //hit YOZ
+        float stickChance = 0.3f;
+        if (dx != pX) {
+            Vec2 v = spreadOnCollision(r2, this.yd, this.zd);
+            this.xd = -dy * (0.3 + Math.random() * 0.4);
+            this.yd = v.x;
+            this.zd = v.y;
+            bouncedOnce = true;
+            if (Math.random() < stickChance) {
+                //stick on the wall
+                this.onGround = true;
+                this.gravity = 0.05f;
+            }
+            return;
+        }
+        //hit XOY
+        if (dz != pZ) {
+            Vec2 v = spreadOnCollision(r2, this.xd, this.yd);
+            this.xd = v.x;
+            this.yd = v.y;
+            this.zd = -dy * (0.3 + Math.random() * 0.4);
+            bouncedOnce = true;
+            if (Math.random() < stickChance) {
+                //stick on the wall
+                this.onGround = true;
+                this.gravity = 0.05f;
+            }
+        }
+    }
+
+    private Vec2 spreadOnCollision(double r2, double d1, double d2) {
+        //lose energy/speed at hitting.
+        r2 *= 0.26;
+        double r = Math.sqrt(r2);
+        double a = Math.random() * r * (random.nextBoolean() ? -1 : 1);
+        double b = Math.sqrt(r2 - a * a) * (random.nextBoolean() ? -1 : 1);
+        //lose energy/speed at turning to different directions.
+        double d = Math.sqrt((d1 - a) * (d1 - a) + (d2 - b) * (d2 - b));
+        double maxEkLoss = 0.7;
+        double ekLoss = 1 - d / (2 * r) * maxEkLoss;
+        return new Vec2((float) (a * ekLoss), (float) (b * ekLoss));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static class Provider implements ParticleProvider<DrySmokeParticleOption> {
+        private final SpriteSet sprites;
+
+        public Provider(SpriteSet pSprites) {
+            this.sprites = pSprites;
+        }
+
+        @Nullable
+        @Override
+        public Particle createParticle(DrySmokeParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
+            DrySmokeParticle d = new DrySmokeParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
+            d.pickSprite(sprites);
+            return d;
+        }
+    }
+}

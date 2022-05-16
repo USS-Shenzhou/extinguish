@@ -16,6 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ussshenzhou.extinguish.items.ModItemRegistry;
+import ussshenzhou.extinguish.particles.ModParticleRegistry;
 
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ public class Extinguish {
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItemRegistry.ITEMS.register(modBus);
+        ModParticleRegistry.PARTICLE_TYPES.register(modBus);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
