@@ -15,6 +15,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ussshenzhou.extinguish.blocks.ModBlockRegistry;
 import ussshenzhou.extinguish.items.ModItemRegistry;
 import ussshenzhou.extinguish.particles.ModParticleRegistry;
 
@@ -41,6 +42,7 @@ public class Extinguish {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItemRegistry.ITEMS.register(modBus);
         ModParticleRegistry.PARTICLE_TYPES.register(modBus);
+        ModBlockRegistry.BLOCKS.register(modBus);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

@@ -2,5 +2,7 @@
   "itemGroup.extinguish:main": "灭",
   "item.extinguish.extinguisher_co2": "二氧化碳灭火器",
   "item.extinguish.extinguisher_water": "水基灭火器",
-  "item.extinguish.extinguisher_dry": "干粉灭火器"
+  "item.extinguish.extinguisher_dry": "干粉灭火器",
+
+  "block.extinguish.extinguisher_bracket": "灭火器支架（单）"
 }

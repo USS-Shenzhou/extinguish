@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "extinguish:block/extinguisher_bracket",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "extinguish:block/extinguisher_bracket",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "extinguish:block/extinguisher_bracket",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "extinguish:block/extinguisher_bracket",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "extinguish:block/extinguisher_bracket",
+      "x": -90
+    },
+    "facing=down": {
+      "model": "extinguish:block/extinguisher_bracket",
+      "x": 90,
+      "y": 180
+    }
+  }
+}
