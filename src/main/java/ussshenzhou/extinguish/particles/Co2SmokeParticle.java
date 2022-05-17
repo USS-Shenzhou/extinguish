@@ -1,5 +1,6 @@
 package ussshenzhou.extinguish.particles;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.util.Mth;
@@ -57,7 +58,7 @@ public class Co2SmokeParticle extends TextureSheetParticle {
             this.zd *= (double) this.friction;
             this.setSpriteFromAge(this.sprites);
 
-            this.alpha *= 0.92f;
+            this.alpha *= 0.94f;
         }
     }
 

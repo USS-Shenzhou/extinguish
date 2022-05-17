@@ -4,6 +4,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,7 +36,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
         this.setColor(f, f, f);
         this.sprites = pSprites;
         this.setSpriteFromAge(pSprites);
-        this.scale((float) (0.6 + Math.random() * 0.6));
+        this.scale((float) (0.7 + Math.random() * 0.6));
     }
 
     @Override
@@ -50,13 +52,18 @@ public class DrySmokeParticle extends TextureSheetParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            this.yd -= 0.04D * (double) this.gravity;
-            this.move(this.xd, this.yd, this.zd);
-            if (this.speedUpWhenYMotionIsBlocked && this.y == this.yo) {
-                this.xd *= 1.1D;
-                this.zd *= 1.1D;
+            //player interact
+            Player player = this.level.getNearestPlayer(this.x, this.y, this.z, 0.7, false);
+            if (player != null) {
+                this.xd += player.getDeltaMovement().x * Math.random() * 0.3;
+                this.zd += player.getDeltaMovement().z * Math.random() * 0.3;
+                this.yd += player.getDeltaMovement().y * 0.27 + 0.265 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z);
+                this.onGround = false;
+                this.gravity = 0.08f;
             }
 
+            this.yd -= 0.04D * (double) this.gravity;
+            this.move(this.xd, this.yd, this.zd);
             this.xd *= (double) this.friction;
             this.yd *= (double) this.friction;
             this.zd *= (double) this.friction;
@@ -65,7 +72,6 @@ public class DrySmokeParticle extends TextureSheetParticle {
                 this.xd *= (double) 0.8F;
                 this.zd *= (double) 0.8F;
             }
-
         }
     }
 
@@ -104,29 +110,39 @@ public class DrySmokeParticle extends TextureSheetParticle {
         float stickChance = 0.3f;
         if (dx != pX) {
             Vec2 v = spreadOnCollision(r2, this.yd, this.zd);
-            this.xd = -dy * (0.3 + Math.random() * 0.4);
             this.yd = v.x;
             this.zd = v.y;
-            bouncedOnce = true;
             if (Math.random() < stickChance) {
-                //stick on the wall
-                this.onGround = true;
-                this.gravity = 0.05f;
+                this.xd = 0;
+                if (Math.random() < 0.7) {
+                    this.gravity = 0;
+                    this.friction = 0.7f;
+                } else {
+                    this.gravity = 0.08f;
+                }
+            } else {
+                this.xd = -dy * (0.3 + Math.random() * 0.4);
             }
+            bouncedOnce = true;
             return;
         }
         //hit XOY
         if (dz != pZ) {
-            Vec2 v = spreadOnCollision(r2, this.xd, this.yd);
+            Vec2 v = spreadOnCollision(r2, this.yd, this.zd);
             this.xd = v.x;
             this.yd = v.y;
-            this.zd = -dy * (0.3 + Math.random() * 0.4);
-            bouncedOnce = true;
             if (Math.random() < stickChance) {
-                //stick on the wall
-                this.onGround = true;
-                this.gravity = 0.05f;
+                this.zd = 0;
+                if (Math.random() < 0.7) {
+                    this.gravity = 0;
+                    this.friction = 0.7f;
+                } else {
+                    this.gravity = 0.08f;
+                }
+            } else {
+                this.zd = -dy * (0.3 + Math.random() * 0.4);
             }
+            bouncedOnce = true;
         }
     }
 
