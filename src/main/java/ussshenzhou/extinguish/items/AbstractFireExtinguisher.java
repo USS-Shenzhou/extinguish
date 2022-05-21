@@ -88,6 +88,7 @@ public abstract class AbstractFireExtinguisher extends Item {
         return maxTime;
     }
 
+    //TODO:put out fire
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         stack.setDamageValue(stack.getDamageValue() + 1);
