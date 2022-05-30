@@ -3,7 +3,10 @@ package ussshenzhou.extinguish.blocks;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -18,10 +21,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 import ussshenzhou.extinguish.blockentities.ExtinguisherBracketEntity;
+import ussshenzhou.extinguish.items.AbstractFireExtinguisher;
 
 /**
  * @author Tony Yu
@@ -43,6 +49,28 @@ public class ExtinguisherBracket extends BaseEntityBlock {
     }
 
     @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (!pLevel.isClientSide) {
+            ItemStack itemStack = pPlayer.getItemInHand(pHand);
+            ExtinguisherBracketEntity entity = (ExtinguisherBracketEntity) pLevel.getBlockEntity(pPos);
+            if (entity.getItemStack().isEmpty()) {
+                if (itemStack.getItem() instanceof AbstractFireExtinguisher){
+                    entity.setItemStack(itemStack.copy());
+                    pPlayer.setItemInHand(pHand, ItemStack.EMPTY);
+                    return InteractionResult.SUCCESS;
+                }
+                return InteractionResult.PASS;
+            } else {
+                pPlayer.getInventory().add(entity.getItemStack());
+                entity.setItemStack(ItemStack.EMPTY);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.PASS;
+        //return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(direction);
     }
@@ -56,18 +84,13 @@ public class ExtinguisherBracket extends BaseEntityBlock {
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         Direction d = pState.getValue(direction);
-        switch (d) {
-            case NORTH:
-                return NORTH;
-            case SOUTH:
-                return SOUTH;
-            case WEST:
-                return WEST;
-            case EAST:
-                return EAST;
-            default:
-                return NORTH;
-        }
+        return switch (d) {
+            case NORTH -> NORTH;
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            case EAST -> EAST;
+            default -> NORTH;
+        };
     }
 
     @Override
@@ -78,6 +101,7 @@ public class ExtinguisherBracket extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new ExtinguisherBracketEntity(pPos,pState);
+        return new ExtinguisherBracketEntity(pPos, pState);
     }
+
 }
