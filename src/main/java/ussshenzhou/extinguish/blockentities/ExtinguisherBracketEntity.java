@@ -2,11 +2,21 @@ package ussshenzhou.extinguish.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.network.protocol.game.ServerboundBlockEntityTagQuery;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.IModelData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Tony Yu
@@ -47,6 +57,15 @@ public class ExtinguisherBracketEntity extends BlockEntity {
 
     public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
-        this.setChanged();
+        sync();
+    }
+    protected void sync() {
+        if (!level.isClientSide) {
+            ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this);
+            ((ServerLevel)level).getChunkSource().chunkMap.getPlayers(new ChunkPos(getBlockPos()),false).forEach(
+                    k -> k.connection.send(p)
+            );
+            setChanged();
+        }
     }
 }

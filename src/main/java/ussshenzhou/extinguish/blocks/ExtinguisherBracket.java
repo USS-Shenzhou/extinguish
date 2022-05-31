@@ -1,6 +1,7 @@
 package ussshenzhou.extinguish.blocks;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +34,7 @@ import ussshenzhou.extinguish.items.AbstractFireExtinguisher;
  * @author Tony Yu
  */
 public class ExtinguisherBracket extends BaseEntityBlock {
-    public static DirectionProperty direction = BlockStateProperties.FACING;
+    private static DirectionProperty direction = BlockStateProperties.FACING;
     private static final VoxelShape NORTH = Block.box(6, 0, 11.5, 10, 10, 16);
     private static final VoxelShape SOUTH = Block.box(6, 0, 0, 10, 10, 4.5);
     private static final VoxelShape WEST = Block.box(11.5, 0, 6, 16, 10, 10);
@@ -56,7 +57,9 @@ public class ExtinguisherBracket extends BaseEntityBlock {
             if (entity.getItemStack().isEmpty()) {
                 if (itemStack.getItem() instanceof AbstractFireExtinguisher){
                     entity.setItemStack(itemStack.copy());
-                    pPlayer.setItemInHand(pHand, ItemStack.EMPTY);
+                    if (!pPlayer.isCreative()){
+                        pPlayer.setItemInHand(pHand, ItemStack.EMPTY);
+                    }
                     return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.PASS;
@@ -67,7 +70,6 @@ public class ExtinguisherBracket extends BaseEntityBlock {
             }
         }
         return InteractionResult.PASS;
-        //return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 
     @Override

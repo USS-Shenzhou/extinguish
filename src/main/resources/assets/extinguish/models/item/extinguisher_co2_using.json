@@ -167,8 +167,7 @@
 			"translation": [0, 14.25, 0]
 		},
 		"fixed": {
-			"translation": [0, 2.25, -4.75],
-			"scale": [2, 2, 2]
+			"translation": [0, 0, -2.5]
 		}
 	}
 }
