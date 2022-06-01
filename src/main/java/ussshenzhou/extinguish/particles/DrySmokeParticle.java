@@ -22,6 +22,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
     private boolean bouncedOnce = false;
 
+    //TODO improve
     protected DrySmokeParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
         this.xd = vx;
