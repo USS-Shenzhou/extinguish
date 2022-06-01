@@ -17,10 +17,9 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
-import ussshenzhou.extinguish.blocks.ExtinguisherBracket;
-import ussshenzhou.extinguish.particles.Co2SmokeParticleOption;
+import ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
+import ussshenzhou.extinguish.blocks.ExtinguisherBracketSingle;
 import ussshenzhou.extinguish.util.ModItemGroups;
 
 import java.util.Random;
@@ -56,7 +55,7 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
-        if (pContext.getLevel().getBlockState(pContext.getClickedPos()).getBlock() instanceof ExtinguisherBracket){
+        if (pContext.getLevel().getBlockState(pContext.getClickedPos()).getBlock() instanceof AbstractExtinguisherBracket){
             return InteractionResult.FAIL;
         }
         return super.useOn(pContext);

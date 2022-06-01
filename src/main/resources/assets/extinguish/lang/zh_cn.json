@@ -4,5 +4,6 @@
   "item.extinguish.extinguisher_water": "水基灭火器",
   "item.extinguish.extinguisher_dry": "干粉灭火器",
 
-  "block.extinguish.extinguisher_bracket": "灭火器支架（单）"
+  "block.extinguish.extinguisher_bracket_single": "灭火器支架（单）",
+  "block.extinguish.extinguisher_bracket_double": "灭火器支架（双）"
 }

@@ -12,5 +12,6 @@ import ussshenzhou.extinguish.Extinguish;
 public class ModBlockRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Extinguish.MOD_ID);
 
-    public static final RegistryObject<ExtinguisherBracket> EXTINGUISHER_BRACKET = BLOCKS.register("extinguisher_bracket", ExtinguisherBracket::new);
+    public static final RegistryObject<ExtinguisherBracketSingle> EXTINGUISHER_BRACKET_SINGLE = BLOCKS.register("extinguisher_bracket_single", ExtinguisherBracketSingle::new);
+    public static final RegistryObject<ExtinguisherBracketDouble> EXTINGUISHER_BRACKET_DOUBLE = BLOCKS.register("extinguisher_bracket_double",ExtinguisherBracketDouble::new);
 }

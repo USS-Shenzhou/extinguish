@@ -4,5 +4,6 @@
   "item.extinguish.extinguisher_water": "Extinguisher (water)",
   "item.extinguish.extinguisher_dry": "Extinguisher (dry chemical)",
 
-  "block.extinguish.extinguisher_bracket": "Extinguisher Bracket (small)"
+  "block.extinguish.extinguisher_bracket_single": "Extinguisher Bracket (single)",
+  "block.extinguish.extinguisher_bracket_double": "Extinguisher Bracket (double)"
 }

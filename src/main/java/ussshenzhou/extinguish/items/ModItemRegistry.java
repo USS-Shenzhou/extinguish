@@ -18,7 +18,11 @@ public class ModItemRegistry {
     public static final RegistryObject<Item> FIRE_EXTINGUISHER_WATER = ITEMS.register("extinguisher_water", FireExtinguisherWater::new);
     public static final RegistryObject<Item> FIRE_EXTINGUISHER_DRY = ITEMS.register("extinguisher_dry", FireExtinguisherDry::new);
 
-    public static final RegistryObject<Item> EXTINGUISHER_BRACKET = ITEMS.register("extinguisher_bracket", () ->
-            new BlockItem(ModBlockRegistry.EXTINGUISHER_BRACKET.get(), new Item.Properties().tab(ModItemGroups.MAIN))
+    public static final RegistryObject<Item> EXTINGUISHER_BRACKET_SINGLE = ITEMS.register("extinguisher_bracket_single", () ->
+            new BlockItem(ModBlockRegistry.EXTINGUISHER_BRACKET_SINGLE.get(), new Item.Properties().tab(ModItemGroups.MAIN))
+    );
+
+    public static final RegistryObject<Item> EXTINGUISHER_BRACKET_DOUBLE = ITEMS.register("extinguisher_bracket_double", () ->
+            new BlockItem(ModBlockRegistry.EXTINGUISHER_BRACKET_DOUBLE.get(), new Item.Properties().tab(ModItemGroups.MAIN))
     );
 }

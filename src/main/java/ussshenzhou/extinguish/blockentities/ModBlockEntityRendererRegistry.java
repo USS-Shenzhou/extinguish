@@ -1,13 +1,9 @@
 package ussshenzhou.extinguish.blockentities;
 
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
  * @author Tony Yu
@@ -16,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ModBlockEntityRendererRegistry {
     @SubscribeEvent
     public static void bind(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_BLOCK_ENTITY.get(),ExtinguisherBracketEntityRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_SINGLE_BLOCK_ENTITY.get(), ExtinguisherBracketSingleEntityRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_DOUBLE_BLOCK_ENTITY.get(), ExtinguisherBracketDoubleEntityRenderer::new);
     }
 }

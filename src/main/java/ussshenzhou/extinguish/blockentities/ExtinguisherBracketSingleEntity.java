@@ -2,34 +2,27 @@ package ussshenzhou.extinguish.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.network.protocol.game.ServerboundBlockEntityTagQuery;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Tony Yu
  */
-public class ExtinguisherBracketEntity extends BlockEntity {
+public class ExtinguisherBracketSingleEntity extends AbstractExtinguisherBracketEntity {
     private ItemStack itemStack = ItemStack.EMPTY;
 
-    public ExtinguisherBracketEntity(BlockEntityType<ExtinguisherBracketEntity> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public ExtinguisherBracketSingleEntity(BlockEntityType<ExtinguisherBracketSingleEntity> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
     }
 
-    public ExtinguisherBracketEntity(BlockPos pWorldPosition, BlockState pBlockState) {
-        this(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_BLOCK_ENTITY.get(), pWorldPosition, pBlockState);
+    public ExtinguisherBracketSingleEntity(BlockPos pWorldPosition, BlockState pBlockState) {
+        this(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_SINGLE_BLOCK_ENTITY.get(), pWorldPosition, pBlockState);
     }
 
     @Override
@@ -51,21 +44,32 @@ public class ExtinguisherBracketEntity extends BlockEntity {
         this.itemStack = ItemStack.of(pTag.getCompound("item"));
     }
 
+    @Override
+    public boolean isAvailable() {
+        return itemStack.isEmpty();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return itemStack.isEmpty();
+    }
+
+
     public ItemStack getItemStack() {
         return itemStack;
     }
 
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
+    @Override
+    public void addItem(ItemStack itemStackCopy) {
+        this.itemStack = itemStackCopy;
         sync();
     }
-    protected void sync() {
-        if (!level.isClientSide) {
-            ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this);
-            ((ServerLevel)level).getChunkSource().chunkMap.getPlayers(new ChunkPos(getBlockPos()),false).forEach(
-                    k -> k.connection.send(p)
-            );
-            setChanged();
-        }
+
+    @Override
+    public ItemStack removeItem() {
+        ItemStack i = this.itemStack;
+        this.itemStack = ItemStack.EMPTY;
+        sync();
+        return i;
     }
 }
