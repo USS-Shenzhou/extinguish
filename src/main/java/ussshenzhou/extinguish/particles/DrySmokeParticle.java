@@ -52,6 +52,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
+            //TODO improve
             //player interact
             Player player = this.level.getNearestPlayer(this.x, this.y, this.z, 0.7, false);
             if (player != null) {
@@ -148,16 +149,18 @@ public class DrySmokeParticle extends TextureSheetParticle {
     }
 
     private Vec2 spreadOnCollision(double r2, double d1, double d2) {
-        //lose energy/speed at hitting.
-        r2 *= 0.26;
-        double r = Math.sqrt(r2);
-        double a = Math.random() * r * (random.nextBoolean() ? -1 : 1);
-        double b = Math.sqrt(r2 - a * a) * (random.nextBoolean() ? -1 : 1);
-        //lose energy/speed at turning to different directions.
-        double d = Math.sqrt((d1 - a) * (d1 - a) + (d2 - b) * (d2 - b));
-        double maxEkLoss = 0.7;
-        double ekLoss = 1 - d / (2 * r) * maxEkLoss;
-        return new Vec2((float) (a * ekLoss), (float) (b * ekLoss));
+        //generalLoss controls radius of spread circle.
+        float generalLoss = 0.4f;
+        r2 = (d1 * d1 + d2 * d2) * generalLoss;
+        float r = (float) Math.sqrt(r2);
+        float a = (float) Math.random() * r * (random.nextBoolean() ? -1 : 1);
+        float b = (float) Math.sqrt(r2 - a * a) * (random.nextBoolean() ? -1 : 1);
+        //lose energy/speed when bouncing to different directions.
+        //lose less speed when going forward. lose less speed when going backward.
+        float d = (float) Math.sqrt((d1 - a) * (d1 - a) + (d2 - b) * (d2 - b));
+        float maxDirectionalLoss = 0.65f;
+        float directionalLoss = 1 - d / (2 * r) * maxDirectionalLoss;
+        return new Vec2((float) (a * directionalLoss * Math.random()), (float) (b * directionalLoss * Math.random()));
     }
 
     @OnlyIn(Dist.CLIENT)
