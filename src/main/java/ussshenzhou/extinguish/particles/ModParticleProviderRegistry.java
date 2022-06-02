@@ -14,6 +14,6 @@ public class ModParticleProviderRegistry {
     @SubscribeEvent
     public static void onParticleProviderRegistry(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticleRegistry.CO2_SMOKE_PARTICLE.get(), Co2SmokeParticle.Provider::new);
-        Minecraft.getInstance().particleEngine.register(ModParticleRegistry.DRY_SMOKE_PARTICLE.get(), DrySmokeParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(ModParticleRegistry.DRY_POWDER_PARTICLE.get(), DryPowderParticle.Provider::new);
     }
 }

@@ -10,12 +10,12 @@ import net.minecraft.world.phys.Vec3;
 /**
  * @author Tony Yu
  */
-public class DrySmokeParticleOption implements ParticleOptions {
+public class DryPowderParticleOption implements ParticleOptions {
     private final Vec3 pos;
     private final Vec3 speed;
-    public static final ParticleOptions.Deserializer<DrySmokeParticleOption> DESERIALIZER = new Deserializer<DrySmokeParticleOption>() {
+    public static final ParticleOptions.Deserializer<DryPowderParticleOption> DESERIALIZER = new Deserializer<DryPowderParticleOption>() {
         @Override
-        public DrySmokeParticleOption fromCommand(ParticleType<DrySmokeParticleOption> pParticleType, StringReader pReader) throws CommandSyntaxException {
+        public DryPowderParticleOption fromCommand(ParticleType<DryPowderParticleOption> pParticleType, StringReader pReader) throws CommandSyntaxException {
             pReader.expect(' ');
             double f = pReader.readDouble();
             pReader.expect(' ');
@@ -28,32 +28,32 @@ public class DrySmokeParticleOption implements ParticleOptions {
             double f4 = pReader.readDouble();
             pReader.expect(' ');
             double f5 = pReader.readDouble();
-            return new DrySmokeParticleOption(new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
+            return new DryPowderParticleOption(new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
         }
 
         @Override
-        public DrySmokeParticleOption fromNetwork(ParticleType<DrySmokeParticleOption> pParticleType, FriendlyByteBuf pBuffer) {
+        public DryPowderParticleOption fromNetwork(ParticleType<DryPowderParticleOption> pParticleType, FriendlyByteBuf pBuffer) {
             double f = pBuffer.readDouble();
             double f1 = pBuffer.readDouble();
             double f2 = pBuffer.readDouble();
             double f3 = pBuffer.readDouble();
             double f4 = pBuffer.readDouble();
             double f5 = pBuffer.readDouble();
-            return new DrySmokeParticleOption(new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
+            return new DryPowderParticleOption(new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
         }
     };
-    public DrySmokeParticleOption(Vec3 pos, Vec3 speed) {
+    public DryPowderParticleOption(Vec3 pos, Vec3 speed) {
         this.pos = pos;
         this.speed = speed;
     }
 
-    public DrySmokeParticleOption() {
+    public DryPowderParticleOption() {
         this.pos = new Vec3(0, 0, 0);
         this.speed = new Vec3(0, 0, 0);
     }
     @Override
     public ParticleType<?> getType() {
-        return ModParticleRegistry.DRY_SMOKE_PARTICLE.get();
+        return ModParticleRegistry.DRY_POWDER_PARTICLE.get();
     }
 
     @Override

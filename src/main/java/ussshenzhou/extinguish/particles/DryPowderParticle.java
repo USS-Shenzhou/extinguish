@@ -4,7 +4,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -17,12 +16,12 @@ import java.util.List;
 /**
  * @author Tony Yu
  */
-public class DrySmokeParticle extends TextureSheetParticle {
+public class DryPowderParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
     private boolean bouncedOnce = false;
 
-    protected DrySmokeParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
+    protected DryPowderParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
         this.xd = vx;
         this.yd = vy;
@@ -164,7 +163,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class Provider implements ParticleProvider<DrySmokeParticleOption> {
+    public static class Provider implements ParticleProvider<DryPowderParticleOption> {
         private final SpriteSet sprites;
 
         public Provider(SpriteSet pSprites) {
@@ -173,8 +172,8 @@ public class DrySmokeParticle extends TextureSheetParticle {
 
         @Nullable
         @Override
-        public Particle createParticle(DrySmokeParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            DrySmokeParticle d = new DrySmokeParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
+        public Particle createParticle(DryPowderParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
+            DryPowderParticle d = new DryPowderParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
             d.pickSprite(sprites);
             return d;
         }

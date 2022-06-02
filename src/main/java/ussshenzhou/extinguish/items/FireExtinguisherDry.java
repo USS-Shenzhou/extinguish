@@ -1,11 +1,8 @@
 package ussshenzhou.extinguish.items;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import ussshenzhou.extinguish.particles.DrySmokeParticleOption;
-import ussshenzhou.extinguish.util.ModItemGroups;
+import ussshenzhou.extinguish.particles.DryPowderParticleOption;
 
 /**
  * @author Tony Yu
@@ -20,6 +17,6 @@ public class FireExtinguisherDry extends AbstractFireExtinguisher {
     void shootParticle(LivingEntity player) {
         Vec3 nozzlePos = getNozzlePosInWorld(player, 13);
         Vec3 speedVec = getSpeedVec(player);
-        addParticle(new DrySmokeParticleOption(), 4, player.level, nozzlePos, speedVec, 0.065f, 0.75f);
+        addParticle(new DryPowderParticleOption(), 4, player.level, nozzlePos, speedVec, 0.065f, 0.75f);
     }
 }
