@@ -22,7 +22,6 @@ public class DrySmokeParticle extends TextureSheetParticle {
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
     private boolean bouncedOnce = false;
 
-    //TODO improve
     protected DrySmokeParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
         this.xd = vx;
@@ -30,7 +29,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
         this.zd = vz;
         this.friction = 0.93f;
         this.hasPhysics = true;
-        this.gravity = 0.2f;
+        this.gravity = (float) (0.2f + Math.random() * 0.05f);
         this.lifetime = (int) (20 * 20 + Math.random() * 20 * 5);
         this.setAlpha((float) (0.9 + Math.random() * 0.1));
         float f = 1.0F - (float) (Math.random() * (double) 0.2F);
@@ -58,7 +57,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
             if (player != null) {
                 this.xd += player.getDeltaMovement().x * Math.random() * 0.3;
                 this.zd += player.getDeltaMovement().z * Math.random() * 0.3;
-                this.yd += player.getDeltaMovement().y * 0.27 + 0.265 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z);
+                this.yd += Math.max(player.getDeltaMovement().y * 0.28, 0.26 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z));
                 this.onGround = false;
                 this.gravity = 0.08f;
             }
@@ -101,6 +100,7 @@ public class DrySmokeParticle extends TextureSheetParticle {
                 this.yd = -dy * (0.3 + Math.random() * 0.6);
                 this.zd = v.y;
                 bouncedOnce = true;
+                this.gravity = 0.1f;
             } else {
                 this.onGround = true;
                 this.gravity = 0;
