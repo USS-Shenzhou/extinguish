@@ -34,7 +34,7 @@ public class DryPowderParticle extends TextureSheetParticle {
         float f = 1.0F - (float) (Math.random() * (double) 0.2F);
         this.setColor(f, f, f);
         this.sprites = pSprites;
-        this.setSpriteFromAge(pSprites);
+        this.pickSprite(pSprites);
         this.scale((float) (0.7 + Math.random() * 0.6));
     }
 
