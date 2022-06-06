@@ -96,6 +96,8 @@ public abstract class AbstractFireExtinguisher extends Item {
     }
 
     //TODO:put out fire
+    //TODO:sound
+
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         stack.setDamageValue(stack.getDamageValue() + 1);

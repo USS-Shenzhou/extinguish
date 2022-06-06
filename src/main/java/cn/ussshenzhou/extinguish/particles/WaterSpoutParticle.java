@@ -11,30 +11,30 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Tony Yu
  */
-public class Co2SmokeParticle extends TextureSheetParticle {
+public class WaterSpoutParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
-    float scale = 0.15f;
+    private boolean fade = false;
 
-    protected Co2SmokeParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
+    protected WaterSpoutParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
+        this.sprites = pSprites;
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
-        this.friction = 0.935f;
+        this.friction = 0.93f;
         this.hasPhysics = true;
-        this.gravity = 0;
-        this.lifetime = (int) (30 + Math.random() * 10);
-        float f = 1.0F - (float) (Math.random() * (double) 0.3F);
+        this.gravity = (float) (0.2f + Math.random() * 0.05f);
+        this.lifetime = (int) (20 * 20 + Math.random() * 20 * 5);
+        this.setAlpha((float) (0.8 + Math.random() * 0.2));
+        float f = 1.0F - (float) (Math.random() * (double) 0.2F);
         this.setColor(f, f, f);
-        this.sprites = pSprites;
-        this.setSpriteFromAge(pSprites);
-        this.scale(scale);
+        this.pickSprite(pSprites);
+        this.scale((float) (0.4 + Math.random() * 0.3));
     }
 
     @Override
@@ -50,17 +50,17 @@ public class Co2SmokeParticle extends TextureSheetParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            //this.yd -= 0.04D * (double) this.gravity;
+            this.yd -= 0.04D * (double) this.gravity;
             this.move(this.xd, this.yd, this.zd);
             this.xd *= (double) this.friction;
             this.yd *= (double) this.friction;
             this.zd *= (double) this.friction;
             this.setSpriteFromAge(this.sprites);
-
-            this.alpha *= 0.94f;
+            if (this.fade) {
+                this.alpha *= 0.987f;
+            }
         }
     }
-
 
     @SuppressWarnings({"", "AlibabaAvoidDoubleOrFloatEqualCompare"})
     @Override
@@ -79,74 +79,76 @@ public class Co2SmokeParticle extends TextureSheetParticle {
             this.setBoundingBox(this.getBoundingBox().move(pX, pY, pZ));
             this.setLocationFromBoundingbox();
         }
-
-        this.scale(1 / scale);
-        scale = (float) (Math.sin((float) (this.age) / lifetime * Math.PI / 2) * 3 + 0.15);
-        this.scale(scale);
+        float stickChance = 0.15f;
         //hit XOZ
         if (dy != pY) {
-            if (dy < 0) {
-                this.onGround = true;
-            }
-            Vec2 v = spreadOnCollision(r2, this.xd, this.zd);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.zd,0.5f);
             this.xd = v.x;
             this.yd = 0;
             this.zd = v.y;
-            //only collide once
-            this.hasPhysics = false;
-            //shoot directly down will trigger the other condition.
+            if (dy <= 0) {
+                //hit floor
+                this.onGround = true;
+                this.fade = true;
+                this.friction = 0.91f;
+                this.hasPhysics = false;
+                this.gravity = 0;
+            } else {
+                //hit ceiling
+                if (Math.random() < stickChance) {
+                    this.gravity = 0;
+                    this.fade = true;
+                } else {
+                    this.gravity = 0.1f;
+                }
+            }
+            //shoot directly down will trigger the other conditions.
             return;
         }
         //hit YOZ
         if (dx != pX) {
-            Vec2 v = spreadOnCollision(r2, this.yd, this.zd);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.yd, this.zd,0.5f);
             this.xd = 0;
             this.yd = v.x;
             this.zd = v.y;
-            this.hasPhysics = false;
+            this.friction = 0.87f;
+            if (Math.random() < stickChance) {
+                this.gravity = 0;
+                this.fade = true;
+            } else {
+                this.gravity = 0.06f;
+            }
             return;
         }
         //hit XOY
         if (dz != pZ) {
-            Vec2 v = spreadOnCollision(r2, this.xd, this.yd);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.yd,0.5f);
             this.xd = v.x;
             this.yd = v.y;
             this.zd = 0;
-            this.hasPhysics = false;
+            this.friction = 0.87f;
+            if (Math.random() < stickChance) {
+                this.gravity = 0;
+                this.fade = true;
+            } else {
+                this.gravity = 0.06f;
+            }
+            return;
         }
     }
 
-    /**
-     * This method works just fine for flat spreading.
-     * @see ModParticleHelper#spreadOnCollision(Random, double, double, double, float)  an improved version
-     *
-     */
-    private Vec2 spreadOnCollision(double r2, double d1, double d2) {
-        //lose energy/speed at hitting.
-        r2 *= 0.25;
-        double r = Math.sqrt(r2);
-        double a = Math.random() * r * (random.nextBoolean() ? -1 : 1);
-        double b = Math.sqrt(r2 - a * a) * (random.nextBoolean() ? -1 : 1);
-        //lose energy/speed at turning to different directions.
-        double d = Math.sqrt((d1 - a) * (d1 - a) + (d2 - b) * (d2 - b));
-        double maxEkLoss = 0.5;
-        double ekLoss = 1 - d / (2 * r) * maxEkLoss;
-        return new Vec2((float) (a * ekLoss), (float) (b * ekLoss));
-    }
-
     @OnlyIn(Dist.CLIENT)
-    public static class Provider implements ParticleProvider<Co2SmokeParticleOption> {
+    public static class Provider implements ParticleProvider<WaterSpoutParticleOption> {
         private final SpriteSet sprites;
 
-        public Provider(SpriteSet pSprites) {
-            this.sprites = pSprites;
+        public Provider(SpriteSet sprites) {
+            this.sprites = sprites;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(Co2SmokeParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            return new Co2SmokeParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
+        public Particle createParticle(WaterSpoutParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
+            return new WaterSpoutParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
         }
     }
-
 }

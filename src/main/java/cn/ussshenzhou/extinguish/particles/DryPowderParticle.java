@@ -96,7 +96,7 @@ public class DryPowderParticle extends TextureSheetParticle {
         if (dy != pY) {
             //only bounce once, then fall and stick to ground.
             if (!bouncedOnce) {
-                Vec2 v = spreadOnCollision(this.xd, this.zd);
+                Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.zd);
                 this.xd = v.x;
                 this.yd = -dy * (0.3 + Math.random() * 0.6);
                 this.zd = v.y;
@@ -109,16 +109,16 @@ public class DryPowderParticle extends TextureSheetParticle {
             return;
         }
         //hit YOZ
-        float stickChance = 0.3f;
+        float stickChance = 0.25f;
         if (dx != pX) {
-            Vec2 v = spreadOnCollision(this.yd, this.zd);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.yd, this.zd);
             this.yd = v.x;
             this.zd = v.y;
             if (Math.random() < stickChance) {
                 this.xd = 0;
-                if (Math.random() < 0.7) {
+                if (Math.random() < 0.5) {
                     this.gravity = 0;
-                    this.friction = 0.7f;
+                    this.friction = 0.8f;
                 } else {
                     this.gravity = 0.08f;
                 }
@@ -130,14 +130,14 @@ public class DryPowderParticle extends TextureSheetParticle {
         }
         //hit XOY
         if (dz != pZ) {
-            Vec2 v = spreadOnCollision(this.yd, this.zd);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.yd, this.zd);
             this.xd = v.x;
             this.yd = v.y;
             if (Math.random() < stickChance) {
                 this.zd = 0;
-                if (Math.random() < 0.7) {
+                if (Math.random() < 0.5) {
                     this.gravity = 0;
-                    this.friction = 0.7f;
+                    this.friction = 0.8f;
                 } else {
                     this.gravity = 0.08f;
                 }
@@ -146,21 +146,6 @@ public class DryPowderParticle extends TextureSheetParticle {
             }
             bouncedOnce = true;
         }
-    }
-
-    private Vec2 spreadOnCollision(double d1, double d2) {
-        //generalLoss controls radius of spread circle.
-        float generalLoss = 0.4f;
-        float r2 = (float) ((d1 * d1 + d2 * d2) * generalLoss);
-        float r = (float) Math.sqrt(r2);
-        float a = (float) Math.random() * r * (random.nextBoolean() ? -1 : 1);
-        float b = (float) Math.sqrt(r2 - a * a) * (random.nextBoolean() ? -1 : 1);
-        //lose energy/speed when bouncing to different directions.
-        //lose less speed when going forward. lose less speed when going backward.
-        float d = (float) Math.sqrt((d1 - a) * (d1 - a) + (d2 - b) * (d2 - b));
-        float maxDirectionalLoss = 0.65f;
-        float directionalLoss = 1 - d / (2 * r) * maxDirectionalLoss;
-        return new Vec2((float) (a * directionalLoss * Math.random()), (float) (b * directionalLoss * Math.random()));
     }
 
     @OnlyIn(Dist.CLIENT)
