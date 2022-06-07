@@ -51,7 +51,6 @@ public class DryPowderParticle extends TextureSheetParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            //TODO improve
             //player interact
             Player player = this.level.getNearestPlayer(this.x, this.y, this.z, 0.7, false);
             if (player != null) {
@@ -109,7 +108,7 @@ public class DryPowderParticle extends TextureSheetParticle {
             return;
         }
         //hit YOZ
-        float stickChance = 0.25f;
+        float stickChance = 0.3f;
         if (dx != pX) {
             Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.yd, this.zd);
             this.yd = v.x;
