@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -89,5 +90,14 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (!pLevel.isClientSide){
+            AbstractExtinguisherBracketEntity abstractExtinguisherBracketEntity = (AbstractExtinguisherBracketEntity) pLevel.getBlockEntity(pPos);
+            abstractExtinguisherBracketEntity.dropContents();
+        }
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 }

@@ -2,6 +2,7 @@ package cn.ussshenzhou.extinguish.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -66,5 +67,10 @@ public class ExtinguisherBracketSingleEntity extends AbstractExtinguisherBracket
         this.itemStack = ItemStack.EMPTY;
         sync();
         return i;
+    }
+
+    @Override
+    public void dropContents() {
+        Containers.dropItemStack(this.level, this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), itemStack);
     }
 }

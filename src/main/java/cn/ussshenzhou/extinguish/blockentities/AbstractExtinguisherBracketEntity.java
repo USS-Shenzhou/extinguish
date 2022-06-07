@@ -26,6 +26,8 @@ public abstract class AbstractExtinguisherBracketEntity extends BlockEntity {
 
     abstract public ItemStack removeItem();
 
+    abstract public void dropContents();
+
     protected void sync() {
         if (!level.isClientSide) {
             ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this);
