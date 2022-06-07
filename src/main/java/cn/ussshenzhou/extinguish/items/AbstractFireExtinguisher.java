@@ -155,7 +155,7 @@ public abstract class AbstractFireExtinguisher extends Item {
         );
         //first-person angle optimize
         if (Minecraft.getInstance().player == player && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
-            return vec3.add(player.getLookAngle().multiply(0.5, 0.5, 0.5));
+            return vec3.add(player.getLookAngle().multiply(1, 1, 1));
         }
         return vec3.add(armRot);
     }
