@@ -25,4 +25,7 @@ public class ModItemRegistry {
     public static final RegistryObject<Item> EXTINGUISHER_BRACKET_DOUBLE = ITEMS.register("extinguisher_bracket_double", () ->
             new BlockItem(ModBlockRegistry.EXTINGUISHER_BRACKET_DOUBLE.get(), new Item.Properties().tab(ModItemGroups.MAIN))
     );
+    public static final RegistryObject<Item> EXTINGUISHER_BRACKET_BUILTIN = ITEMS.register("extinguisher_bracket_builtin", () ->
+            new BlockItem(ModBlockRegistry.EXTINGUISHER_BRACKET_BUILTIN.get(), new Item.Properties().tab(ModItemGroups.MAIN))
+    );
 }

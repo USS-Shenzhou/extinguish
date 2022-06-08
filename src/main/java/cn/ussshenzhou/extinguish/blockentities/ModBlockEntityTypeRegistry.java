@@ -22,4 +22,8 @@ public class ModBlockEntityTypeRegistry {
       "extinguisher_bracket_double",
             ()->BlockEntityType.Builder.of(ExtinguisherBracketDoubleEntity::new,ModBlockRegistry.EXTINGUISHER_BRACKET_DOUBLE.get()).build(DSL.remainderType())
     );
+    public static final RegistryObject<BlockEntityType<ExtinguisherBracketBuiltinEntity>> EXTINGUISHER_BRACKET_BUILTIN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "extinguisher_bracket_builtin",
+            ()->BlockEntityType.Builder.of(ExtinguisherBracketBuiltinEntity::new,ModBlockRegistry.EXTINGUISHER_BRACKET_BUILTIN.get()).build(DSL.remainderType())
+    );
 }

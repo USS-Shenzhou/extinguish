@@ -53,9 +53,8 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
             } else {
                 if (!entity.isEmpty()) {
                     takeOut(entity, pPlayer);
-                    return InteractionResult.SUCCESS;
                 } else {
-                    return InteractionResult.FAIL;
+                    return InteractionResult.CONSUME;
                 }
             }
         }
@@ -94,10 +93,10 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (!pLevel.isClientSide){
+        if (!pLevel.isClientSide && pNewState.getBlock() != pState.getBlock()) {
             AbstractExtinguisherBracketEntity abstractExtinguisherBracketEntity = (AbstractExtinguisherBracketEntity) pLevel.getBlockEntity(pPos);
             abstractExtinguisherBracketEntity.dropContents();
         }
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        //super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 }
