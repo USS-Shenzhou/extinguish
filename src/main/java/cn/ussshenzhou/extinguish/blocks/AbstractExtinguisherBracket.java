@@ -97,6 +97,6 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
             AbstractExtinguisherBracketEntity abstractExtinguisherBracketEntity = (AbstractExtinguisherBracketEntity) pLevel.getBlockEntity(pPos);
             abstractExtinguisherBracketEntity.dropContents();
         }
-        //super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 }
