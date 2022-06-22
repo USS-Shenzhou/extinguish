@@ -30,7 +30,7 @@ public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracket
 
     @Override
     public CompoundTag getUpdateTag() {
-        CompoundTag compoundTag = new CompoundTag();
+        CompoundTag compoundTag = super.getUpdateTag();
         compoundTag.put("item0", itemStacks[0].copy().serializeNBT());
         compoundTag.put("item1", itemStacks[1].copy().serializeNBT());
         return compoundTag;

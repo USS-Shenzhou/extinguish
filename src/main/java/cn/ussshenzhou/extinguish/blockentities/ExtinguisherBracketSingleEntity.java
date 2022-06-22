@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ExtinguisherBracketSingleEntity extends AbstractExtinguisherBracketEntity {
     private ItemStack itemStack = ItemStack.EMPTY;
 
-    public ExtinguisherBracketSingleEntity(BlockEntityType<ExtinguisherBracketSingleEntity> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public ExtinguisherBracketSingleEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
     }
 
@@ -29,7 +29,7 @@ public class ExtinguisherBracketSingleEntity extends AbstractExtinguisherBracket
 
     @Override
     public CompoundTag getUpdateTag() {
-        CompoundTag compoundTag = new CompoundTag();
+        CompoundTag compoundTag = super.getUpdateTag();
         compoundTag.put("item", itemStack.copy().serializeNBT());
         return compoundTag;
     }
