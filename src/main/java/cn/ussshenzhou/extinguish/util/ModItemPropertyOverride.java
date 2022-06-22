@@ -20,14 +20,14 @@ public class ModItemPropertyOverride {
     public static void itemPropertyOverride(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             ItemProperties.register(ModItemRegistry.FIRE_EXTINGUISHER_CO2.get(), new ResourceLocation("using"), ((pStack, pLevel, pEntity, pSeed) -> {
-                return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherCo2 && pStack.getOrCreateTag().getBoolean("using") ? 1 : 0;
+                return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherCo2 && pStack.getOrCreateTag().getBoolean("usingAnime") ? 1 : 0;
                 //return pEntity != null && pEntity.getUseItem() == pStack ? 1 : 0;
             }));
             ItemProperties.register(ModItemRegistry.FIRE_EXTINGUISHER_DRY.get(), new ResourceLocation("using"), ((pStack, pLevel, pEntity, pSeed) -> {
-                return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherDry && pStack.getOrCreateTag().getBoolean("using") ? 1 : 0;
+                return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherDry && pStack.getOrCreateTag().getBoolean("usingAnime") ? 1 : 0;
             }));
             ItemProperties.register(ModItemRegistry.FIRE_EXTINGUISHER_WATER.get(), new ResourceLocation("using"), ((pStack, pLevel, pEntity, pSeed) -> {
-                return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherWater && pStack.getOrCreateTag().getBoolean("using") ? 1 : 0;
+                return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherWater && pStack.getOrCreateTag().getBoolean("usingAnime") ? 1 : 0;
             }));
         });
     }
