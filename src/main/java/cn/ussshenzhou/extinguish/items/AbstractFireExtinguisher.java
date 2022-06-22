@@ -18,6 +18,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import cn.ussshenzhou.extinguish.util.ModItemGroups;
 
@@ -45,7 +46,7 @@ public abstract class AbstractFireExtinguisher extends Item {
         if (stack.getDamageValue() < maxTime) {
             duration = maxTime - stack.getDamageValue();
             pPlayer.startUsingItem(pUsedHand);
-            stack.getOrCreateTag().putBoolean("using", true);
+            stack.getOrCreateTag().putBoolean("usingAnime", true);
             return InteractionResultHolder.consume(stack);
         }
         duration = 0;
@@ -62,20 +63,20 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
-        pStack.getOrCreateTag().putBoolean("using", false);
+        pStack.getOrCreateTag().putBoolean("usingAnime", false);
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        pStack.getOrCreateTag().putBoolean("using", false);
+        pStack.getOrCreateTag().putBoolean("usingAnime", false);
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         if (slotChanged) {
-            oldStack.getOrCreateTag().putBoolean("using", false);
+            oldStack.getOrCreateTag().putBoolean("usingAnime", false);
         }
         return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
     }
@@ -87,9 +88,8 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     @Override
     public int getUseDuration(@NotNull ItemStack pStack) {
-        return duration;
+        return maxTime - pStack.getDamageValue();
     }
-
     @Override
     public int getMaxDamage(ItemStack stack) {
         return maxTime;
