@@ -56,7 +56,7 @@ public class DryPowderParticle extends TextureSheetParticle {
             if (player != null) {
                 this.xd += player.getDeltaMovement().x * Math.random() * 0.3;
                 this.zd += player.getDeltaMovement().z * Math.random() * 0.3;
-                this.yd += Math.max(player.getDeltaMovement().y * 0.28, 0.26 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z));
+                this.yd += Math.max(player.getDeltaMovement().y * 0.12, 0.12 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z));
                 this.onGround = false;
                 this.gravity = 0.08f;
             }
