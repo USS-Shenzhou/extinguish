@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import cn.ussshenzhou.extinguish.Extinguish;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ModItemGroups {
     /**

@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "extinguish:block/auto_water_cannon"
+    },
+    "facing=south": {
+      "model": "extinguish:block/auto_water_cannon"
+    },
+    "facing=west": {
+      "model": "extinguish:block/auto_water_cannon"
+    },
+    "facing=east": {
+      "model": "extinguish:block/auto_water_cannon"
+    },
+    "facing=up": {
+      "model": "extinguish:block/auto_water_cannon"
+    },
+    "facing=down": {
+      "model": "extinguish:block/auto_water_cannon"
+    }
+  }
+}

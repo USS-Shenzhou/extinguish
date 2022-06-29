@@ -3,6 +3,9 @@ package cn.ussshenzhou.extinguish.blocks;
 import cn.ussshenzhou.extinguish.blockentities.ExtinguisherBracketBuiltinEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -38,9 +42,14 @@ public class ExtinguisherBracketBuiltin extends AbstractExtinguisherBracket {
         this.registerDefaultState(this.getStateDefinition().any().setValue(direction, Direction.NORTH).setValue(open, false));
     }
 
-    @Override
+    /*@Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return BASE;
+    }*/
+
+    @Override
+    public float getShadeBrightness(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+        return 1;
     }
 
     @Override
@@ -72,7 +81,6 @@ public class ExtinguisherBracketBuiltin extends AbstractExtinguisherBracket {
             if (pState.getValue(open)) {
                 if (pPlayer.isShiftKeyDown()) {
                     //shiftDown right click to close the door
-                    //TODO sound
                     pLevel.setBlock(pPos, pState.setValue(open, false), 2);
                 } else {
                     //right click to use when opened
@@ -122,4 +130,6 @@ public class ExtinguisherBracketBuiltin extends AbstractExtinguisherBracket {
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new ExtinguisherBracketBuiltinEntity(pPos, pState);
     }
+
+
 }

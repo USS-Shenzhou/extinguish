@@ -15,4 +15,5 @@ public class ModBlockRegistry {
     public static final RegistryObject<ExtinguisherBracketSingle> EXTINGUISHER_BRACKET_SINGLE = BLOCKS.register("extinguisher_bracket_single", ExtinguisherBracketSingle::new);
     public static final RegistryObject<ExtinguisherBracketDouble> EXTINGUISHER_BRACKET_DOUBLE = BLOCKS.register("extinguisher_bracket_double",ExtinguisherBracketDouble::new);
     public static final RegistryObject<ExtinguisherBracketBuiltin> EXTINGUISHER_BRACKET_BUILTIN = BLOCKS.register("extinguisher_bracket_builtin",ExtinguisherBracketBuiltin::new);
+    public static final RegistryObject<AutoWaterCannon> AUTO_WATER_CANNON = BLOCKS.register("auto_water_cannon",AutoWaterCannon::new);
 }

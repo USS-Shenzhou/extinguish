@@ -1,14 +1,8 @@
 package cn.ussshenzhou.extinguish.blockentities;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * @author USS_Shenzhou
  */
-public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleEntity {
+public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleEntity{
     BlockState blockState = Blocks.AIR.defaultBlockState();
 
     public ExtinguisherBracketBuiltinEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -109,10 +103,11 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
                 return blockModel.getOverrides();
             }
         };*/
-        sync();
+        syncFromServer(level,this);
     }
 
     public BlockState getDisguiseBlockState() {
         return blockState;
     }
+
 }

@@ -15,5 +15,6 @@ public class ModBlockEntityRendererRegistry {
         event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_SINGLE_BLOCK_ENTITY.get(), ExtinguisherBracketSingleEntityRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_DOUBLE_BLOCK_ENTITY.get(), ExtinguisherBracketDoubleEntityRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.EXTINGUISHER_BRACKET_BUILTIN_BLOCK_ENTITY.get(),ExtinguisherBracketBuiltinEntityRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(),AutoWaterCannonEntityRenderer::new);
     }
 }

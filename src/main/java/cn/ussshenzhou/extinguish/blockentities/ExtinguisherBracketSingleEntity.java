@@ -58,14 +58,14 @@ public class ExtinguisherBracketSingleEntity extends AbstractExtinguisherBracket
     @Override
     public void addItem(ItemStack itemStackCopy) {
         this.itemStack = itemStackCopy;
-        sync();
+        syncFromServer(level,this);
     }
 
     @Override
     public ItemStack removeItem() {
         ItemStack i = this.itemStack;
         this.itemStack = ItemStack.EMPTY;
-        sync();
+        syncFromServer(level,this);
         return i;
     }
 

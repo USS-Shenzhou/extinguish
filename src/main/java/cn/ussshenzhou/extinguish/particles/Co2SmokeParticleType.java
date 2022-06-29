@@ -14,6 +14,6 @@ public class Co2SmokeParticleType extends ParticleType<Co2SmokeParticleOption> {
 
     @Override
     public Codec<Co2SmokeParticleOption> codec() {
-        return Codec.unit(new Co2SmokeParticleOption(new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
+        return Codec.unit(new Co2SmokeParticleOption(null,new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
     }
 }

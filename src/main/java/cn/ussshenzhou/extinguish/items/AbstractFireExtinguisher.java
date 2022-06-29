@@ -1,12 +1,17 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
+import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
+import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,7 +23,8 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.LogManager;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import cn.ussshenzhou.extinguish.util.ModItemGroups;
 
@@ -27,9 +33,12 @@ import java.util.Random;
 /**
  * @author Tony Yu
  */
+//TODO 与烈焰人互动
 public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
     private int duration = 0;
+    @OnlyIn(Dist.CLIENT)
+    MovableSoundInstance soundInstanceBuffer = null;
 
     public AbstractFireExtinguisher(int maxTime) {
         super(new Properties()
@@ -43,10 +52,11 @@ public abstract class AbstractFireExtinguisher extends Item {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-        if (stack.getDamageValue() < maxTime) {
+        if (stack.getDamageValue() < maxTime - 1) {
             duration = maxTime - stack.getDamageValue();
             pPlayer.startUsingItem(pUsedHand);
             stack.getOrCreateTag().putBoolean("usingAnime", true);
+            startSound(pLevel, pPlayer);
             return InteractionResultHolder.consume(stack);
         }
         duration = 0;
@@ -55,7 +65,7 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
-        if (pContext.getLevel().getBlockState(pContext.getClickedPos()).getBlock() instanceof AbstractExtinguisherBracket){
+        if (pContext.getLevel().getBlockState(pContext.getClickedPos()).getBlock() instanceof AbstractExtinguisherBracket) {
             return InteractionResult.FAIL;
         }
         return super.useOn(pContext);
@@ -64,13 +74,24 @@ public abstract class AbstractFireExtinguisher extends Item {
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
         pStack.getOrCreateTag().putBoolean("usingAnime", false);
+        stopSound(pLevel);
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         pStack.getOrCreateTag().putBoolean("usingAnime", false);
+        stopSound(pLevel);
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
+    }
+
+    abstract protected void startSound(Level pLevel, Player pPlayer);
+
+    private void stopSound(Level level) {
+        if (level.isClientSide && soundInstanceBuffer != null) {
+            Minecraft.getInstance().getSoundManager().stop(soundInstanceBuffer);
+            soundInstanceBuffer = null;
+        }
     }
 
     @Override
@@ -90,13 +111,11 @@ public abstract class AbstractFireExtinguisher extends Item {
     public int getUseDuration(@NotNull ItemStack pStack) {
         return maxTime - pStack.getDamageValue();
     }
+
     @Override
     public int getMaxDamage(ItemStack stack) {
         return maxTime;
     }
-
-    //TODO:put out fire
-    //TODO:sound
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {

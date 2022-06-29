@@ -14,7 +14,7 @@ public class DryPowderParticleType extends ParticleType<DryPowderParticleOption>
 
     @Override
     public Codec<DryPowderParticleOption> codec() {
-        return Codec.unit(new DryPowderParticleOption(new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
+        return Codec.unit(new DryPowderParticleOption(null,new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
 
     }
 }

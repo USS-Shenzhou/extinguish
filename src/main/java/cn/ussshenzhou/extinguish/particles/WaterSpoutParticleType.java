@@ -14,6 +14,6 @@ public class WaterSpoutParticleType extends ParticleType<WaterSpoutParticleOptio
 
     @Override
     public Codec<WaterSpoutParticleOption> codec() {
-        return Codec.unit(new WaterSpoutParticleOption(new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
+        return Codec.unit(new WaterSpoutParticleOption(null,new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
     }
 }

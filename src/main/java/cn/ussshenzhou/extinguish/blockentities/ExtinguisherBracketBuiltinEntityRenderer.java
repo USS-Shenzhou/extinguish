@@ -27,7 +27,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -106,6 +106,7 @@ public class ExtinguisherBracketBuiltinEntityRenderer implements BlockEntityRend
         Direction direction = pBlockEntity.getBlockState().getValue(BlockStateProperties.FACING);
         BlockState blockState = pBlockEntity.getDisguiseBlockState();
         BakedModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+        //TODO 持久化
         List<BakedQuad> quadList = new ArrayList<>();
         for (Direction d : Direction.values()) {
             if (d == direction) {
@@ -168,7 +169,6 @@ public class ExtinguisherBracketBuiltinEntityRenderer implements BlockEntityRend
         //BakedModel bakedModel = pBlockEntity.getDisguiseModel();
         //if (bakedModel != null) {
         pPoseStack.pushPose();
-        //TODO:alpha
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
                 pPoseStack.last(),
                 pBufferSource.getBuffer(ItemBlockRenderTypes.getRenderType(pBlockEntity.getDisguiseBlockState(), false)),

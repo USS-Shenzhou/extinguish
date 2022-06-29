@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * @author Tony Yu
  */
-public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracketEntity {
+public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracketEntity{
     private ItemStack[] itemStacks = {ItemStack.EMPTY, ItemStack.EMPTY};
 
     public ExtinguisherBracketDoubleEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -64,7 +64,7 @@ public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracket
         } else {
             itemStacks[1] = itemStackCopy;
         }
-        sync();
+        syncFromServer(level,this);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracket
             i = itemStacks[1];
             itemStacks[1] = ItemStack.EMPTY;
         }
-        sync();
+        syncFromServer(level,this);
         return i;
     }
 

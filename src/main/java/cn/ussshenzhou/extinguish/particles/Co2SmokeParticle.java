@@ -1,17 +1,21 @@
 package cn.ussshenzhou.extinguish.particles;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author Tony Yu
@@ -20,13 +24,15 @@ public class Co2SmokeParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
     float scale = 0.15f;
+    private UUID shooter;
 
-    protected Co2SmokeParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
+    protected Co2SmokeParticle(UUID shooter, ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
+        this.shooter = shooter;
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
-        this.friction = 0.935f;
+        this.friction = 0.93f;
         this.hasPhysics = true;
         this.gravity = 0;
         this.lifetime = (int) (30 + Math.random() * 10);
@@ -58,6 +64,12 @@ public class Co2SmokeParticle extends TextureSheetParticle {
             this.setSpriteFromAge(this.sprites);
 
             this.alpha *= 0.94f;
+            //Different client have different particle details.
+            //Since particle does not exist on server, only shooter's client is the standard position to detect fire.
+            //After every 5 ticks, particle has a certain chance to put out fire.
+            if (age % 4 == 0 && shooter != null && shooter == Minecraft.getInstance().player.getUUID() && random.nextFloat() < 0.075f) {
+                ModParticleHelper.putOut(new BlockPos(x, y, z));
+            }
         }
     }
 
@@ -118,8 +130,8 @@ public class Co2SmokeParticle extends TextureSheetParticle {
 
     /**
      * This method works just fine for flat spreading.
-     * @see ModParticleHelper#spreadOnCollision(Random, double, double, double, float)  an improved version
      *
+     * @see ModParticleHelper#spreadOnCollision(Random, double, double, double, float)  an improved version
      */
     private Vec2 spreadOnCollision(double r2, double d1, double d2) {
         //lose energy/speed at hitting.
@@ -145,7 +157,7 @@ public class Co2SmokeParticle extends TextureSheetParticle {
         @Nullable
         @Override
         public Particle createParticle(Co2SmokeParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            return new Co2SmokeParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
+            return new Co2SmokeParticle(pType.getShooter(), pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
         }
     }
 

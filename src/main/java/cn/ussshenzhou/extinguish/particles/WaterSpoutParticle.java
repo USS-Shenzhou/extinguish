@@ -1,7 +1,9 @@
 package cn.ussshenzhou.extinguish.particles;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
@@ -11,6 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Tony Yu
@@ -19,17 +22,19 @@ public class WaterSpoutParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
     private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0D);
     private boolean fade = false;
+    private UUID shooter;
 
-    protected WaterSpoutParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
+    protected WaterSpoutParticle(UUID shooter,ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
+        this.shooter = shooter;
         this.sprites = pSprites;
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
-        this.friction = 0.93f;
+        this.friction = 0.92f;
         this.hasPhysics = true;
-        this.gravity = (float) (0.2f + Math.random() * 0.05f);
-        this.lifetime = (int) (20 * 20 + Math.random() * 20 * 5);
+        this.gravity = (float) (0.18f + Math.random() * 0.1f);
+        this.lifetime = (int) (15 * 20 + Math.random() * 20 * 5);
         this.setAlpha((float) (0.8 + Math.random() * 0.2));
         float f = 1.0F - (float) (Math.random() * (double) 0.2F);
         this.setColor(f, f, f);
@@ -57,7 +62,13 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             this.zd *= (double) this.friction;
             this.setSpriteFromAge(this.sprites);
             if (this.fade) {
-                this.alpha *= 0.987f;
+                this.alpha *= 0.995f;
+            }
+            //Different client have different particle details.
+            //Since particle does not exist on server, only shooter's client is the standard position to detect fire.
+            //After every 5 ticks, particle has a certain chance to put out fire.
+            if (age % 5 == 0 && shooter != null && shooter == Minecraft.getInstance().player.getUUID() && random.nextFloat() < 0.06f) {
+                ModParticleHelper.putOut(new BlockPos(x, y, z));
             }
         }
     }
@@ -148,7 +159,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
         @Nullable
         @Override
         public Particle createParticle(WaterSpoutParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            return new WaterSpoutParticle(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
+            return new WaterSpoutParticle(pType.getShooter(),pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
         }
     }
 }

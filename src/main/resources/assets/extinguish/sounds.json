@@ -1,0 +1,30 @@
+{
+  "co2_shoot": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extinguish:co2_shoot"
+      }]
+  },
+  "co2_start": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extinguish:co2_start"
+      }]
+  },
+  "dry_shoot": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extinguish:dry_shoot"
+      }]
+  },
+  "dry_start": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extinguish:dry_start"
+      }]
+  }
+}
