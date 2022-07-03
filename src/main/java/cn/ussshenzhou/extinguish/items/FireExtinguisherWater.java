@@ -7,8 +7,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -18,6 +21,13 @@ import net.minecraft.world.phys.Vec3;
 public class FireExtinguisherWater extends AbstractFireExtinguisher {
     public FireExtinguisherWater() {
         super(12 * 20);
+    }
+
+    @Override
+    protected void interactWithBlaze(ItemStack stack, Player player, Blaze blaze) {
+        if (player.level.dimension() != Level.NETHER) {
+            super.interactWithBlaze(stack, player, blaze);
+        }
     }
 
     @Override

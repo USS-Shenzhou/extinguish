@@ -1,6 +1,7 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
+import cn.ussshenzhou.extinguish.fire.FireHelper;
 import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
 import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
 import net.minecraft.client.CameraType;
@@ -10,12 +11,13 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import cn.ussshenzhou.extinguish.util.ModItemGroups;
 
@@ -47,6 +50,18 @@ public abstract class AbstractFireExtinguisher extends Item {
                 .durability(maxTime)
         );
         this.maxTime = maxTime;
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
+        if (!pPlayer.level.isClientSide() && pInteractionTarget instanceof Blaze) {
+            this.interactWithBlaze(pStack, pPlayer, (Blaze) pInteractionTarget);
+        }
+        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
+    }
+
+    protected void interactWithBlaze(ItemStack stack, Player player, Blaze blaze) {
+        blaze.setTarget(null);
     }
 
     @Override
