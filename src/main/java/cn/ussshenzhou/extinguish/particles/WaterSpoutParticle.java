@@ -10,9 +10,11 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -24,7 +26,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
     private boolean fade = false;
     private UUID shooter;
 
-    protected WaterSpoutParticle(UUID shooter,ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
+    protected WaterSpoutParticle(UUID shooter, ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
         this.shooter = shooter;
         this.sprites = pSprites;
@@ -67,7 +69,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             //Different client have different particle details.
             //Since particle does not exist on server, only shooter's client is the standard position to detect fire.
             //After every 5 ticks, particle has a certain chance to put out fire.
-            if (age % 5 == 0 && shooter != null && shooter == Minecraft.getInstance().player.getUUID() && random.nextFloat() < 0.06f) {
+            if (age % 5 == 0 && shooter.equals(Minecraft.getInstance().player.getUUID()) && random.nextFloat() < 0.06f) {
                 ModParticleHelper.putOut(new BlockPos(x, y, z));
             }
         }
@@ -93,7 +95,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
         float stickChance = 0.15f;
         //hit XOZ
         if (dy != pY) {
-            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.zd,0.5f);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.zd, 0.5f);
             this.xd = v.x;
             this.yd = 0;
             this.zd = v.y;
@@ -118,7 +120,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
         }
         //hit YOZ
         if (dx != pX) {
-            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.yd, this.zd,0.5f);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.yd, this.zd, 0.5f);
             this.xd = 0;
             this.yd = v.x;
             this.zd = v.y;
@@ -133,7 +135,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
         }
         //hit XOY
         if (dz != pZ) {
-            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.yd,0.5f);
+            Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.yd, 0.5f);
             this.xd = v.x;
             this.yd = v.y;
             this.zd = 0;
@@ -159,7 +161,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
         @Nullable
         @Override
         public Particle createParticle(WaterSpoutParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            return new WaterSpoutParticle(pType.getShooter(),pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
+            return new WaterSpoutParticle(pType.getShooter(), pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprites);
         }
     }
 }
