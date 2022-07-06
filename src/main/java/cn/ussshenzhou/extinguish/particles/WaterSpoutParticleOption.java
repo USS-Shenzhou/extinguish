@@ -31,7 +31,7 @@ public class WaterSpoutParticleOption implements ParticleOptions {
             double f4 = pReader.readDouble();
             pReader.expect(' ');
             double f5 = pReader.readDouble();
-            return new WaterSpoutParticleOption(null,new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
+            return new WaterSpoutParticleOption(null, new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
         }
 
         @Override
@@ -43,18 +43,26 @@ public class WaterSpoutParticleOption implements ParticleOptions {
             double f3 = pBuffer.readDouble();
             double f4 = pBuffer.readDouble();
             double f5 = pBuffer.readDouble();
-            return new WaterSpoutParticleOption(u,new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
+            return new WaterSpoutParticleOption(u, new Vec3(f, f1, f2), new Vec3(f3, f4, f5));
         }
     };
 
-    public WaterSpoutParticleOption(UUID uuid,Vec3 pos, Vec3 speed) {
-        this.shooter = uuid;
+    public WaterSpoutParticleOption(UUID uuid, Vec3 pos, Vec3 speed) {
+        if (uuid == null) {
+            this.shooter = new UUID(0, 0);
+        } else {
+            this.shooter = uuid;
+        }
         this.pos = pos;
         this.speed = speed;
     }
 
     public WaterSpoutParticleOption(UUID uuid) {
-        this.shooter = uuid;
+        if (uuid == null) {
+            this.shooter = new UUID(0, 0);
+        } else {
+            this.shooter = uuid;
+        }
         this.pos = new Vec3(0, 0, 0);
         this.speed = new Vec3(0, 0, 0);
     }
@@ -79,6 +87,7 @@ public class WaterSpoutParticleOption implements ParticleOptions {
     public String writeToString() {
         return pos + " " + speed;
     }
+
     public UUID getShooter() {
         return shooter;
     }

@@ -47,13 +47,21 @@ public class DryPowderParticleOption implements ParticleOptions {
         }
     };
     public DryPowderParticleOption(UUID uuid,Vec3 pos, Vec3 speed) {
-        this.shooter = uuid;
+        if (uuid == null) {
+            this.shooter = new UUID(0, 0);
+        } else {
+            this.shooter = uuid;
+        }
         this.pos = pos;
         this.speed = speed;
     }
 
     public DryPowderParticleOption(UUID uuid) {
-        this.shooter = uuid;
+        if (uuid == null) {
+            this.shooter = new UUID(0, 0);
+        } else {
+            this.shooter = uuid;
+        }
         this.pos = new Vec3(0, 0, 0);
         this.speed = new Vec3(0, 0, 0);
     }
