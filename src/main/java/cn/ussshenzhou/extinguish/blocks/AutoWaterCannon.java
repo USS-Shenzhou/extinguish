@@ -1,6 +1,7 @@
 package cn.ussshenzhou.extinguish.blocks;
 
 import cn.ussshenzhou.extinguish.blockentities.AutoWaterCannonEntity;
+import cn.ussshenzhou.extinguish.blockentities.AutoWaterCannonEntityWhite;
 import cn.ussshenzhou.extinguish.blockentities.ModBlockEntityTypeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,6 +10,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,15 +26,17 @@ import org.jetbrains.annotations.Nullable;
  * @author USS_Shenzhou
  */
 public class AutoWaterCannon extends BaseEntityBlock {
-    private static final VoxelShape DOWN = box(4,7,4,12,16,12);
-    private static final VoxelShape UP = box(4,0,4,12,9,12);
+    private static final VoxelShape DOWN = box(4, 7, 4, 12, 16, 12);
+    private static final VoxelShape UP = box(4, 0, 4, 12, 9, 12);
+
     protected AutoWaterCannon() {
         super(
                 Properties.of(Material.METAL)
                         .noOcclusion()
-                        .strength(1,5)
+                        .strength(1, 5)
+                        .sound(SoundType.METAL)
         );
-        this.registerDefaultState(this.getStateDefinition().any().setValue(BlockStateProperties.FACING, Direction.NORTH));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(BlockStateProperties.FACING, Direction.DOWN));
     }
 
     @Override
@@ -48,15 +52,25 @@ public class AutoWaterCannon extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ?
-                createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::clientTick):
-                createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::serverTick);
+        if (pState.getBlock().equals(ModBlockRegistry.AUTO_WATER_CANNON.get())) {
+            return pLevel.isClientSide() ?
+                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::clientTick) :
+                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::serverTick);
+        } else {
+            return pLevel.isClientSide() ?
+                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY_WHITE.get(), AutoWaterCannonEntityWhite::clientTick) :
+                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY_WHITE.get(), AutoWaterCannonEntityWhite::serverTick);
+        }
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new AutoWaterCannonEntity(pPos,pState);
+        if (pState.getBlock().equals(ModBlockRegistry.AUTO_WATER_CANNON.get())) {
+            return new AutoWaterCannonEntity(pPos, pState);
+        } else {
+            return new AutoWaterCannonEntityWhite(pPos, pState);
+        }
     }
 
     @Override
@@ -64,9 +78,10 @@ public class AutoWaterCannon extends BaseEntityBlock {
         super.createBlockStateDefinition(pBuilder);
         pBuilder.add(BlockStateProperties.FACING);
     }
+
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, pContext.getNearestLookingVerticalDirection().getOpposite());
+        return this.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 }

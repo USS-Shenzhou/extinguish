@@ -2,28 +2,16 @@ package cn.ussshenzhou.extinguish.particles;
 
 import cn.ussshenzhou.extinguish.network.PutOutFirePack;
 import cn.ussshenzhou.extinguish.network.PutOutFirePackSend;
+import cn.ussshenzhou.extinguish.fire.FireHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkInstance;
-import net.minecraftforge.network.simple.SimpleChannel;
-import org.apache.logging.log4j.LogManager;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -55,7 +43,7 @@ public class ModParticleHelper {
         Level level = Minecraft.getInstance().level;
         BlockState blockState = level.getBlockState(pos);
         Block block = level.getBlockState(pos).getBlock();
-        if (blockState.is(BlockTags.FIRE) || AbstractCandleBlock.isLit(blockState) || CampfireBlock.isLitCampfire(blockState)) {
+        if (FireHelper.isFire(blockState)) {
             ResourceKey<Level> l = level.dimension();
             ResourceLocation resourceLocation = l.location();
             PutOutFirePackSend.channel.sendToServer(new PutOutFirePack(pos, resourceLocation));

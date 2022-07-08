@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * @author Tony Yu
@@ -31,6 +33,7 @@ public class FireExtinguisherWater extends AbstractFireExtinguisher {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     protected void startSound(Level pLevel, Player pPlayer) {
         if (pLevel.isClientSide) {
             pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), ModSoundsRegistry.DRY_START.get(), SoundSource.PLAYERS, 0.8f, 0.9f);

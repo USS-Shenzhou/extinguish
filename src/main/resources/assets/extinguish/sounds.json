@@ -26,5 +26,12 @@
       {
         "name": "extinguish:dry_start"
       }]
+  },
+  "cannon_shoot": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extinguish:cannon_shoot"
+      }]
   }
 }

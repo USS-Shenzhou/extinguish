@@ -8,10 +8,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -34,6 +36,7 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
                 Properties.of(Material.METAL)
                         .noOcclusion()
                         .strength(1, 5)
+                        .sound(SoundType.METAL)
         );
         this.registerDefaultState(this.getStateDefinition().any().setValue(direction, Direction.NORTH));
     }
@@ -98,5 +101,10 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
             abstractExtinguisherBracketEntity.dropContents();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return super.getFlammability(state, level, pos, direction);
     }
 }

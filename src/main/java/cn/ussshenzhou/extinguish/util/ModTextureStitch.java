@@ -19,5 +19,6 @@ public class ModTextureStitch {
             return;
         }
         event.addSprite(AutoWaterCannonEntityModel.LOCATION);
+        event.addSprite(AutoWaterCannonEntityModel.LOCATION_WHITE);
     }
 }

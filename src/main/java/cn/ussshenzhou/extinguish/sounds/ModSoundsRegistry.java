@@ -26,4 +26,7 @@ public class ModSoundsRegistry {
     public static final RegistryObject<SoundEvent> DRY_START = SOUNDS.register("dry_start",
             () -> new SoundEvent(new ResourceLocation(Extinguish.MOD_ID, "dry_start"))
     );
+    public static final RegistryObject<SoundEvent> CANNON_SHOOT = SOUNDS.register("cannon_shoot",
+            () -> new SoundEvent(new ResourceLocation(Extinguish.MOD_ID, "cannon_shoot"))
+    );
 }

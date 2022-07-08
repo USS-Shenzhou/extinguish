@@ -50,4 +50,19 @@ public class ModItemRegistry {
     public static final RegistryObject<Item> AUTO_WATER_CANNON = ITEMS.register("auto_water_cannon", () ->
             new BlockItem(ModBlockRegistry.AUTO_WATER_CANNON.get(), new Item.Properties().tab(ModItemGroups.MAIN))
     );
+
+    public static final RegistryObject<Item> AUTO_WATER_CANNON_WHITE = ITEMS.register("auto_water_cannon_white", () ->
+            new BlockItem(ModBlockRegistry.AUTO_WATER_CANNON_WHITE.get(), new Item.Properties().tab(ModItemGroups.MAIN))
+    );
+
+    public static final RegistryObject<Item> DEMO_OAK_PLANKS = ITEMS.register("demo_oak_planks", () ->
+            new BlockItem(ModBlockRegistry.DEMO_OAK_PLANKS.get(), new Item.Properties().tab(ModItemGroups.MAIN)){
+                @Override
+                public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
+                    super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
+                    TranslatableComponent translatableComponent1 = new TranslatableComponent("item.extinguish.tip.demo_oak_planks");
+                    translatableComponent1.setStyle(this.getDescription().getStyle().withColor(0xaa0000));
+                    pTooltip.add(translatableComponent1);
+                }
+            });
 }

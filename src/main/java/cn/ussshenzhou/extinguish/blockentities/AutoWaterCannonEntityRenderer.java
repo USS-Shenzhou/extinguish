@@ -2,6 +2,7 @@ package cn.ussshenzhou.extinguish.blockentities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -18,17 +19,18 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
  */
 public class AutoWaterCannonEntityRenderer implements BlockEntityRenderer<AutoWaterCannonEntity> {
     private final AutoWaterCannonEntityModel autoWaterCannonEntityModel;
-    public static final Material LOCATION = new Material(TextureAtlas.LOCATION_BLOCKS, AutoWaterCannonEntityModel.LOCATION);
+    private final Material material;
     private static final float PI = (float) Math.PI;
 
-    public AutoWaterCannonEntityRenderer(BlockEntityRendererProvider.Context pContext) {
-        autoWaterCannonEntityModel = new AutoWaterCannonEntityModel(pContext.bakeLayer(AutoWaterCannonEntityModel.MODEL_LAYER_LOCATION));
+    public AutoWaterCannonEntityRenderer(BlockEntityRendererProvider.Context pContext, ResourceLocation location) {
+        autoWaterCannonEntityModel = new AutoWaterCannonEntityModel(pContext.bakeLayer(new ModelLayerLocation(location, "main")));
+        material = new Material(TextureAtlas.LOCATION_BLOCKS, location);
     }
 
     @Override
     public void render(AutoWaterCannonEntity blockEntity, float pPartialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         Direction direction = blockEntity.getBlockState().getValue(BlockStateProperties.FACING);
-        VertexConsumer vertexConsumer = LOCATION.buffer(bufferSource, RenderType::entityTranslucent);
+        VertexConsumer vertexConsumer = material.buffer(bufferSource, RenderType::entityCutoutNoCull);
         poseStack.pushPose();
         poseStack.translate(0.5, 0, 0.5);
         switch (direction) {

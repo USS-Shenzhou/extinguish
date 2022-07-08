@@ -30,4 +30,8 @@ public class ModBlockEntityTypeRegistry {
             "auto_water_cannon",
             () -> BlockEntityType.Builder.of(AutoWaterCannonEntity::new, ModBlockRegistry.AUTO_WATER_CANNON.get()).build(DSL.remainderType())
     );
+    public static final RegistryObject<BlockEntityType<AutoWaterCannonEntityWhite>> AUTO_WATER_CANNON_BLOCK_ENTITY_WHITE = BLOCK_ENTITY_TYPES.register(
+            "auto_water_cannon_white",
+            () -> BlockEntityType.Builder.of(AutoWaterCannonEntityWhite::new, ModBlockRegistry.AUTO_WATER_CANNON_WHITE.get()).build(DSL.remainderType())
+    );
 }

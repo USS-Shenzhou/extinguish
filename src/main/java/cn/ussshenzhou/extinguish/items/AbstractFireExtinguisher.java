@@ -1,22 +1,21 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
-import cn.ussshenzhou.extinguish.fire.FireHelper;
-import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
+import cn.ussshenzhou.extinguish.util.ModItemGroups;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -25,22 +24,17 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
-import cn.ussshenzhou.extinguish.util.ModItemGroups;
 
 import java.util.Random;
 
 /**
  * @author Tony Yu
  */
-//TODO 与烈焰人互动
 public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
     private int duration = 0;
-    @OnlyIn(Dist.CLIENT)
+
     MovableSoundInstance soundInstanceBuffer = null;
 
     public AbstractFireExtinguisher(int maxTime) {
@@ -61,6 +55,7 @@ public abstract class AbstractFireExtinguisher extends Item {
     }
 
     protected void interactWithBlaze(ItemStack stack, Player player, Blaze blaze) {
+        //TODO improve
         blaze.setTarget(null);
     }
 
@@ -71,7 +66,9 @@ public abstract class AbstractFireExtinguisher extends Item {
             duration = maxTime - stack.getDamageValue();
             pPlayer.startUsingItem(pUsedHand);
             stack.getOrCreateTag().putBoolean("usingAnime", true);
-            startSound(pLevel, pPlayer);
+            if (pLevel.isClientSide){
+                startSound(pLevel, pPlayer);
+            }
             return InteractionResultHolder.consume(stack);
         }
         duration = 0;
@@ -89,19 +86,25 @@ public abstract class AbstractFireExtinguisher extends Item {
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
         pStack.getOrCreateTag().putBoolean("usingAnime", false);
-        stopSound(pLevel);
+        if (pLevel.isClientSide){
+            stopSound(pLevel);
+        }
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         pStack.getOrCreateTag().putBoolean("usingAnime", false);
-        stopSound(pLevel);
+        if (pLevel.isClientSide){
+            stopSound(pLevel);
+        }
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 
+    @OnlyIn(Dist.CLIENT)
     abstract protected void startSound(Level pLevel, Player pPlayer);
 
+    @OnlyIn(Dist.CLIENT)
     private void stopSound(Level level) {
         if (level.isClientSide && soundInstanceBuffer != null) {
             Minecraft.getInstance().getSoundManager().stop(soundInstanceBuffer);

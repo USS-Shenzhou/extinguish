@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * @author USS_Shenzhou
  */
-public class AutoWaterCannonEntityModel extends Model {
+public class AutoWaterCannonEntityModel extends Model{
     public static final ResourceLocation LOCATION = new ResourceLocation("extinguish:item/auto_water_cannon");
-    public static final ModelLayerLocation MODEL_LAYER_LOCATION = new ModelLayerLocation(LOCATION, "main");
+    public static final ResourceLocation LOCATION_WHITE = new ResourceLocation("extinguish:item/auto_water_cannon_white");
     private final ModelPart base;
     private final ModelPart tube;
 

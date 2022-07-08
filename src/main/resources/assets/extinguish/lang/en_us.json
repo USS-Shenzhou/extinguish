@@ -8,7 +8,10 @@
   "block.extinguish.extinguisher_bracket_double": "Extinguisher Bracket (double)",
   "block.extinguish.extinguisher_bracket_builtin": "Embedded Extinguisher Cabinet",
   "block.extinguish.auto_water_cannon": "Auto Water Cannon",
+  "block.extinguish.auto_water_cannon_white": "Auto Water Cannon (white)",
+  "block.extinguish.demo_oak_planks": "Oak Planks for demo.",
 
   "item.extinguish.tip.extinguisher_bracket_builtin1": "Hit the front to open/close the door.",
-  "item.extinguish.tip.extinguisher_bracket_builtin2": "Hit other sides while holding a block to set a disguise."
+  "item.extinguish.tip.extinguisher_bracket_builtin2": "Hit other sides while holding a block to set a disguise.",
+  "item.extinguish.tip.demo_oak_planks": "Flammable but not burn-out-able. Only for demonstration"
 }

@@ -10,7 +10,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModNetworkRegister {
     @SubscribeEvent
-    public static void onCommonSetup(FMLCommonSetupEvent event){
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(PutOutFirePackSend::registerMessage);
+        event.enqueueWork(PreciseParticlePackSend::registerMessage);
     }
 }

@@ -1,5 +1,6 @@
 package cn.ussshenzhou.extinguish.network;
 
+import cn.ussshenzhou.extinguish.fire.FireHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,27 +43,17 @@ public class PutOutFirePack {
         buf.writeResourceLocation(dimension);
     }
 
-    /**
-     * @see net.minecraft.world.entity.projectile.ThrownPotion#dowseFire(BlockPos)
-     */
+
     public void handler(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(
                 () -> {
                     if (context.get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
                         MinecraftServer minecraftServer = (MinecraftServer) LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
-                        ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY,dimension);
+                        ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, dimension);
                         Level level = minecraftServer.getLevel(key);
                         if (level != null) {
                             BlockState blockState = level.getBlockState(blockPos);
-                            if (blockState.is(BlockTags.FIRE)) {
-                                level.removeBlock(blockPos, false);
-                            } else if (AbstractCandleBlock.isLit(blockState)) {
-                                AbstractCandleBlock.extinguish((Player)null, blockState, level, blockPos);
-                            } else if (CampfireBlock.isLitCampfire(blockState)) {
-                                level.levelEvent((Player)null, 1009, blockPos, 0);
-                                CampfireBlock.dowse(context.get().getSender(), level, blockPos, blockState);
-                                level.setBlockAndUpdate(blockPos, blockState.setValue(CampfireBlock.LIT, Boolean.valueOf(false)));
-                            }
+                            FireHelper.putOut(level, blockState, this.blockPos, context.get().getSender());
                         }
                     } else {
                     }

@@ -8,8 +8,13 @@
   "block.extinguish.extinguisher_bracket_double": "灭火器支架（双）",
   "block.extinguish.extinguisher_bracket_builtin": "嵌入式灭火器箱",
   "block.extinguish.auto_water_cannon": "自动消防水炮",
+  "block.extinguish.auto_water_cannon_white": "自动消防水炮（白色）",
+  "block.extinguish.demo_oak_planks": "演示用木板",
 
   "item.extinguish.tip.extinguisher_bracket_builtin1": "点击正面开/关门",
-  "item.extinguish.tip.extinguisher_bracket_builtin2": "手持完整方块点击侧面设置外壳"
+  "item.extinguish.tip.extinguisher_bracket_builtin2": "手持完整方块点击侧面设置外壳",
+  "item.extinguish.tip.demo_oak_planks": "易燃但不可燃尽 仅作演示之用"
+
+
 
 }

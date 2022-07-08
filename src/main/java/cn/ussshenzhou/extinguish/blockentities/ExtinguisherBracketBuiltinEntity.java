@@ -1,17 +1,37 @@
 package cn.ussshenzhou.extinguish.blockentities;
 
+import cn.ussshenzhou.extinguish.render.RawQuad;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import org.apache.logging.log4j.LogManager;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author USS_Shenzhou
  */
 public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleEntity{
     BlockState blockState = Blocks.AIR.defaultBlockState();
+    private BakedModel disguiseModel;
 
     public ExtinguisherBracketBuiltinEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
@@ -41,8 +61,17 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
     }
 
     public void setDisguise(BlockState disguiseState) {
+        LogManager.getLogger().debug(disguiseState.toString());
         blockState = disguiseState;
-        /*Direction direction = level.getBlockState(this.getBlockPos()).getValue(BlockStateProperties.FACING);
+        if (getLevel().isClientSide){
+            calculateDisguiseModel(disguiseState);
+        }
+        syncFromServer(level,this);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void calculateDisguiseModel(BlockState blockState){
+        Direction direction = this.getBlockState().getValue(BlockStateProperties.FACING);
         BakedModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
         List<BakedQuad> quadList = new ArrayList<>();
         for (Direction d : Direction.values()) {
@@ -102,8 +131,12 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
             public ItemOverrides getOverrides() {
                 return blockModel.getOverrides();
             }
-        };*/
-        syncFromServer(level,this);
+        };
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public BakedModel getDisguiseModel() {
+        return disguiseModel;
     }
 
     public BlockState getDisguiseBlockState() {

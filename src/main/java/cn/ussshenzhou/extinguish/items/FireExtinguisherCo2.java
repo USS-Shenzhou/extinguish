@@ -2,16 +2,16 @@ package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.particles.Co2SmokeParticleOption;
 import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
-import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
+//import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
-
-import java.util.Calendar;
 
 /**
  * @author Tony Yu
@@ -22,10 +22,11 @@ public class FireExtinguisherCo2 extends AbstractFireExtinguisher {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     protected void startSound(Level pLevel, Player pPlayer) {
         if (pLevel.isClientSide) {
             pLevel.playSound(pPlayer,pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), ModSoundsRegistry.CO2_START.get(), SoundSource.PLAYERS,1,1);
-            soundInstanceBuffer = new MovableSoundInstance(pPlayer, ModSoundsRegistry.CO2_SHOOT.get(), SoundSource.PLAYERS, 1, 1, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ());
+            soundInstanceBuffer = new cn.ussshenzhou.extinguish.sounds.MovableSoundInstance(pPlayer, ModSoundsRegistry.CO2_SHOOT.get(), SoundSource.PLAYERS, 1, 1, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ());
             Minecraft.getInstance().getSoundManager().play(soundInstanceBuffer);
         }
     }
