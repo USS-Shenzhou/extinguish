@@ -2,6 +2,7 @@ package cn.ussshenzhou.extinguish.blockentities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -37,13 +38,17 @@ public class AutoWaterCannonEntityRenderer implements BlockEntityRenderer<AutoWa
             case DOWN:
                 autoWaterCannonEntityModel.getBase().setRotation(0, Mth.lerp(pPartialTick, blockEntity.getPrevYaw(), blockEntity.getYaw()), 0);
                 autoWaterCannonEntityModel.getTube().setRotation(PI - Mth.lerp(pPartialTick, blockEntity.getPrevPitch(), blockEntity.getPitch()), 0, 0);
-                autoWaterCannonEntityModel.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, 1, 1, 1, 1);
                 break;
             case UP:
+                autoWaterCannonEntityModel.getBase().setRotation(0, -Mth.lerp(pPartialTick, blockEntity.getPrevYaw(), blockEntity.getYaw()), 0);
+                autoWaterCannonEntityModel.getTube().setRotation(Mth.lerp(pPartialTick, blockEntity.getPrevPitch(), blockEntity.getPitch()) - PI, 0, 0);
+                poseStack.mulPose(Vector3f.ZP.rotation(PI));
+                poseStack.translate(0, -1, 0);
                 break;
             default:
                 break;
         }
+        autoWaterCannonEntityModel.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, 1, 1, 1, 1);
         poseStack.popPose();
     }
 }

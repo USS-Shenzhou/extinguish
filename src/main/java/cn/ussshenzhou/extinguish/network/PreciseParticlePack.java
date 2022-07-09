@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkDirection;
@@ -85,23 +87,28 @@ public class PreciseParticlePack {
                     if (context.get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
 
                     } else {
-                        Level level = Minecraft.getInstance().level;
-                        Random r = new Random();
-                        for (int i = 0; i < count; i++) {
-                            level.addParticle(
-                                    particleOption,
-                                    false,
-                                    x + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * posDiffuse,
-                                    y + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * posDiffuse,
-                                    z + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * posDiffuse,
-                                    speedX + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * speedDiffuse,
-                                    speedY + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * speedDiffuse,
-                                    speedZ + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * speedDiffuse
-                            );
-                        }
+                        clientHandler();
                     }
                 }
         );
         context.get().setPacketHandled(true);
+    }
+
+    private void clientHandler(){
+        Level level = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT).get();
+        //Level level = Minecraft.getInstance().level;
+        Random r = new Random();
+        for (int i = 0; i < count; i++) {
+            level.addParticle(
+                    particleOption,
+                    false,
+                    x + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * posDiffuse,
+                    y + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * posDiffuse,
+                    z + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * posDiffuse,
+                    speedX + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * speedDiffuse,
+                    speedY + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * speedDiffuse,
+                    speedZ + (r.nextBoolean() ? -1 : 1) * r.nextDouble() * speedDiffuse
+            );
+        }
     }
 }

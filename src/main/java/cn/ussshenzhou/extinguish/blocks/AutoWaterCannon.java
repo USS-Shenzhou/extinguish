@@ -52,15 +52,9 @@ public class AutoWaterCannon extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if (pState.getBlock().equals(ModBlockRegistry.AUTO_WATER_CANNON.get())) {
-            return pLevel.isClientSide() ?
-                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::clientTick) :
-                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::serverTick);
-        } else {
-            return pLevel.isClientSide() ?
-                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY_WHITE.get(), AutoWaterCannonEntityWhite::clientTick) :
-                    createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY_WHITE.get(), AutoWaterCannonEntityWhite::serverTick);
-        }
+        return pLevel.isClientSide() ?
+                createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::clientTick) :
+                createTickerHelper(pBlockEntityType, ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), AutoWaterCannonEntity::serverTick);
     }
 
     @Nullable
@@ -82,6 +76,7 @@ public class AutoWaterCannon extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
+        //return this.defaultBlockState().setValue(BlockStateProperties.FACING, Direction.DOWN);
+        return this.defaultBlockState().setValue(BlockStateProperties.FACING, pContext.getNearestLookingVerticalDirection().getOpposite());
     }
 }

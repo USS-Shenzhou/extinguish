@@ -8,18 +8,24 @@ import cn.ussshenzhou.extinguish.network.PreciseParticlePackSend;
 import cn.ussshenzhou.extinguish.particles.WaterSpoutParticleOption;
 import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.Random;
@@ -47,8 +53,8 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
     private static final float NOZZLE_LENGTH = 8 / 16f;
     private static final float MAX_SPEED = 1.4f;
     private static final float MIN_SPEED = 0.3f;
-    private static final float MAX_DIFFUSE = 0.1f;
-    private static final float MIN_DIFFUSE = 0.01f;
+    private static final float MAX_DIFFUSE = 0.13f;
+    private static final float MIN_DIFFUSE = 0.03f;
     private static final float MAX_PITCH_RATE = (float) Math.toRadians(2);
     private static final float MAX_YAW_RATE = (float) Math.toRadians(3);
     private static final int MAX_RANGE = 16;
@@ -93,10 +99,6 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
         }
         thisEntity.checkPitch();
         thisEntity.checkYaw();
-        if (thisEntity.pitchGoal == 0 && thisEntity.yawGoal == 0) {
-            thisEntity.pitchReady = false;
-            thisEntity.yawReady = false;
-        }
         thisEntity.syncFromServer(level, thisEntity);
     }
 
@@ -120,7 +122,8 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
 
     private Vec3 getNozzlePos() {
         Vec3 v = new Vec3(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
-        v = v.add(0.5, 9 / 16d, 0.5);
+
+        v = v.add(0.5, isDown() ? 9 / 16d : 7 / 16d, 0.5);
         v = v.add(getDirectionNormalVector().multiply(NOZZLE_LENGTH, NOZZLE_LENGTH, NOZZLE_LENGTH));
         return v;
     }
@@ -142,16 +145,26 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
         thisEntity.prevYaw = thisEntity.yaw;
     }
 
+    private boolean isDown() {
+        return this.getBlockState().getValue(BlockStateProperties.FACING) == Direction.DOWN;
+    }
 
-    public boolean setTarget(BlockPos blockPos) {
-        double distance = Math.sqrt(getBlockPos().distToLowCornerSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
-        Vec3 vt = new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-        Vec3 v = new Vec3(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
+
+    public boolean setTarget(BlockPos targetPos) {
+        double distance = Math.sqrt(getBlockPos().distToLowCornerSqr(targetPos.getX(), targetPos.getY(), targetPos.getZ()));
+        Vec3 vt = new Vec3(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+        BlockState targetBlock = this.level.getBlockState(targetPos);
+        if (targetBlock.getBlock() == Blocks.FIRE) {
+            vt = vt.add(FireHelper.getFireCenter(targetBlock));
+        } else {
+            vt = vt.add(0.5,0.2,0.5);
+        }
+        Vec3 v = new Vec3(getBlockPos().getX() + 0.5, getBlockPos().getY() + 0.5, getBlockPos().getZ() + 0.5);
         if (distance < MAX_RANGE && !busy() && canSee(vt, v)) {
             Vec3 dv = vt.add(-v.x, -v.y, -v.z);
             float pGoal = (float) Math.atan(dv.y / Math.sqrt(dv.x * dv.x + dv.z * dv.z));
             //gravity compensate
-            pGoal += (distance / MAX_RANGE) * Math.toRadians(5);
+            //pGoal += getGravityCompensate(distance, dv.y);
             if (!setPitchGoal(pGoal)) {
                 return false;
             }
@@ -163,14 +176,28 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
             } else {
                 setYawGoal(f - PI);
             }
-            this.target = blockPos;
+            this.target = targetPos;
             return true;
         }
         return false;
     }
 
+    private float getGravityCompensate(double distance, double dy) {
+        //(float) ((distance / MAX_RANGE) * Math.toRadians(isDown() ? 4 : 10))
+        double distanceCompensate = 0;
+        //Mth.lerp(distance/MAX_RANGE,);
+        double yCompensate;
+        if (dy <= 0) {
+            LogManager.getLogger().debug(dy / -2);
+            yCompensate = Mth.lerp(Math.min(dy / -2, 1), -10, 0);
+        } else {
+            yCompensate = Mth.lerp(dy / 8, -10, 0);
+        }
+        return (float) Math.toRadians(distanceCompensate + yCompensate);
+    }
+
     private boolean canSee(Vec3 vt, Vec3 v) {
-        return FireHelper.canSee(level, vt.add(0.5, 0.5, 0.5), v.add(0.2, 0.5, 0.2)) || FireHelper.canSee(level, vt.add(0.5, 0.5, 0.5), v.add(0.7, 0.5, 0.7));
+        return FireHelper.canSee(level, vt, v.add(-0.3, 0, -0.3)) || FireHelper.canSee(level, vt, v.add(0.3, 0, 0.3));
     }
 
     public boolean busy() {
@@ -200,7 +227,9 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
     }
 
     private boolean setPitchGoal(float pitchGoal) {
-        if (pitchGoal < (float) Math.toRadians(30) && pitchGoal > -PI / 2) {
+        float minPitch = isDown() ? -PI / 2 - 0.0001f : (float) Math.toRadians(-30);
+        float maxPitch = isDown() ? (float) Math.toRadians(30) : PI / 2;
+        if (pitchGoal < maxPitch && pitchGoal > minPitch) {
             this.pitchGoal = pitchGoal;
             pitchReady = false;
             return true;
