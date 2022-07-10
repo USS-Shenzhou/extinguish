@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class DryPowderParticle extends TextureSheetParticle {
     private final SpriteSet sprites;

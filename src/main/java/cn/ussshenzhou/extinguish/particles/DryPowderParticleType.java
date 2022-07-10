@@ -5,7 +5,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class DryPowderParticleType extends ParticleType<DryPowderParticleOption> {
     public DryPowderParticleType() {

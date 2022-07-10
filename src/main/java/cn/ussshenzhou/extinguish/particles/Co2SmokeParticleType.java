@@ -5,7 +5,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class Co2SmokeParticleType extends ParticleType<Co2SmokeParticleOption> {
     public Co2SmokeParticleType() {

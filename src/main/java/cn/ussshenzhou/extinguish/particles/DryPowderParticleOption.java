@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class DryPowderParticleOption implements ParticleOptions {
     private final UUID shooter;

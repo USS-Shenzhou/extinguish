@@ -22,7 +22,7 @@ import cn.ussshenzhou.extinguish.Extinguish;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ModBlockRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Extinguish.MOD_ID);

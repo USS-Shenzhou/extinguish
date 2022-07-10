@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class FireExtinguisherCo2 extends AbstractFireExtinguisher {
     public FireExtinguisherCo2() {

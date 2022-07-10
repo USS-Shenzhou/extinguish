@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class Co2SmokeParticle extends TextureSheetParticle {
     private final SpriteSet sprites;

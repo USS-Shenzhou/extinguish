@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class WaterSpoutParticle extends TextureSheetParticle {
     private final SpriteSet sprites;

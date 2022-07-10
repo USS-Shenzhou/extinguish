@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;

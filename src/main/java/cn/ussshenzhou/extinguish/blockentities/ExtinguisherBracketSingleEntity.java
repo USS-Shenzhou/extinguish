@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ExtinguisherBracketSingleEntity extends AbstractExtinguisherBracketEntity {
     private ItemStack itemStack = ItemStack.EMPTY;

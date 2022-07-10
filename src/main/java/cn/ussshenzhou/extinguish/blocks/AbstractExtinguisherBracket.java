@@ -26,7 +26,7 @@ import cn.ussshenzhou.extinguish.blockentities.AbstractExtinguisherBracketEntity
 import cn.ussshenzhou.extinguish.items.AbstractFireExtinguisher;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
     protected static DirectionProperty direction = BlockStateProperties.FACING;

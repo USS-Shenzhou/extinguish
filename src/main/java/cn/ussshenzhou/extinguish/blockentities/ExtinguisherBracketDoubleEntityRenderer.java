@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ExtinguisherBracketDoubleEntityRenderer implements BlockEntityRenderer<ExtinguisherBracketDoubleEntity> {
     public ExtinguisherBracketDoubleEntityRenderer(BlockEntityRendererProvider.Context pContext) {

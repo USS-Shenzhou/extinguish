@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ModBlockEntityTypeRegistry {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Extinguish.MOD_ID);

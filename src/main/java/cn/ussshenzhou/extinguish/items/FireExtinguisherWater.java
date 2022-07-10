@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class FireExtinguisherWater extends AbstractFireExtinguisher {
     public FireExtinguisherWater() {

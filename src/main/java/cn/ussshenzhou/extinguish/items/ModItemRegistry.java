@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ModItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Extinguish.MOD_ID);

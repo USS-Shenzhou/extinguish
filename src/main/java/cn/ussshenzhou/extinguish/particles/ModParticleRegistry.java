@@ -7,7 +7,7 @@ import net.minecraftforge.registries.RegistryObject;
 import cn.ussshenzhou.extinguish.Extinguish;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ModParticleRegistry {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Extinguish.MOD_ID);

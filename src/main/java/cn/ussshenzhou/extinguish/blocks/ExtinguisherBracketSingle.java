@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import cn.ussshenzhou.extinguish.blockentities.ExtinguisherBracketSingleEntity;
 
 /**
- * @author Tony Yu
+ * @author USS_Shenzhou
  */
 public class ExtinguisherBracketSingle extends AbstractExtinguisherBracket {
     private static final VoxelShape NORTH = box(6, 0, 11.5, 10, 10, 16);
