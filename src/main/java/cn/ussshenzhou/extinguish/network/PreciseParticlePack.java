@@ -94,9 +94,10 @@ public class PreciseParticlePack {
         context.get().setPacketHandled(true);
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void clientHandler(){
-        Level level = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT).get();
-        //Level level = Minecraft.getInstance().level;
+        //Level level = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT).get();
+        Level level = Minecraft.getInstance().level;
         Random r = new Random();
         for (int i = 0; i < count; i++) {
             level.addParticle(

@@ -51,7 +51,7 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
     private boolean unattended = false;
     //private static final Predicate<ServerPlayer> ALL_SERVER_PLAYER = serverPlayer -> serverPlayer != null;
     private static final float NOZZLE_LENGTH = 8 / 16f;
-    private static final float MAX_SPEED = 1.4f;
+    private static final float MAX_SPEED = 1.5f;
     private static final float MIN_SPEED = 0.3f;
     private static final float MAX_DIFFUSE = 0.13f;
     private static final float MIN_DIFFUSE = 0.03f;
@@ -157,14 +157,14 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
         if (targetBlock.getBlock() == Blocks.FIRE) {
             vt = vt.add(FireHelper.getFireCenter(targetBlock));
         } else {
-            vt = vt.add(0.5,0.2,0.5);
+            vt = vt.add(0.5, 0.2, 0.5);
         }
         Vec3 v = new Vec3(getBlockPos().getX() + 0.5, getBlockPos().getY() + 0.5, getBlockPos().getZ() + 0.5);
         if (distance < MAX_RANGE && !busy() && canSee(vt, v)) {
             Vec3 dv = vt.add(-v.x, -v.y, -v.z);
             float pGoal = (float) Math.atan(dv.y / Math.sqrt(dv.x * dv.x + dv.z * dv.z));
             //gravity compensate
-            //pGoal += getGravityCompensate(distance, dv.y);
+            pGoal += getGravityCompensate(distance, dv.y);
             if (!setPitchGoal(pGoal)) {
                 return false;
             }
@@ -183,17 +183,13 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
     }
 
     private float getGravityCompensate(double distance, double dy) {
-        //(float) ((distance / MAX_RANGE) * Math.toRadians(isDown() ? 4 : 10))
-        double distanceCompensate = 0;
-        //Mth.lerp(distance/MAX_RANGE,);
-        double yCompensate;
-        if (dy <= 0) {
-            LogManager.getLogger().debug(dy / -2);
-            yCompensate = Mth.lerp(Math.min(dy / -2, 1), -10, 0);
+        double compensate;
+        if (dy > 12) {
+            compensate = (dy - 12) / (MAX_RANGE - 10) * 5;
         } else {
-            yCompensate = Mth.lerp(dy / 8, -10, 0);
+            compensate = (1 - Math.abs(dy / distance)) * 4;
         }
-        return (float) Math.toRadians(distanceCompensate + yCompensate);
+        return (float) Math.toRadians(compensate);
     }
 
     private boolean canSee(Vec3 vt, Vec3 v) {

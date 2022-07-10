@@ -4,6 +4,7 @@ import cn.ussshenzhou.extinguish.blockentities.AutoWaterCannonEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -34,7 +35,13 @@ public class FireManager {
         HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(autoWaterCannonEntity.getLevel());
         if (h != null) {
             ChunkPos c = new ChunkPos(autoWaterCannonEntity.getBlockPos());
-            h.get(c).remove(autoWaterCannonEntity);
+            if (h.get(c) != null) {
+                h.get(c).remove(autoWaterCannonEntity);
+            } else {
+                LogManager.getLogger().error("Failed trying remove Auto Water Cannon at "
+                        + autoWaterCannonEntity.getBlockPos().toShortString()
+                        + "from FireManager list. Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
+            }
         }
     }
 

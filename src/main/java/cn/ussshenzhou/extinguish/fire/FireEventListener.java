@@ -38,7 +38,7 @@ public class FireEventListener {
     @SubscribeEvent
     public static void onLevelTick(TickEvent.WorldTickEvent event) {
         if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.haveTime()) {
-            addAutoWaterCannonToManager(event);
+            addAutoWaterCannonToManager();
             checkFireBufferOnServerTick(event);
         }
     }
@@ -72,7 +72,7 @@ public class FireEventListener {
         autoWaterCannonEntities.add(autoWaterCannonEntity);
     }
 
-    private static void addAutoWaterCannonToManager(TickEvent.WorldTickEvent event) {
+    private static void addAutoWaterCannonToManager() {
         if (!autoWaterCannonEntities.isEmpty()) {
             //TODO find a better way
             //rarely cause a nullPointerExp. Can't find why.
@@ -81,7 +81,10 @@ public class FireEventListener {
                     FireManager.addAutoWaterCannon(a);
                 }
                 autoWaterCannonEntities.clear();
-            } catch (NullPointerException ignored){}
+            } catch (NullPointerException ignored){
+                LogManager.getLogger().error("An unexpected Exception happened when trying add Auto Water Cannon from buffer to FireManager list." +
+                        " Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
+            }
         }
     }
 }
