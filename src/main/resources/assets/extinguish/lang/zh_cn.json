@@ -9,12 +9,18 @@
   "block.extinguish.extinguisher_bracket_builtin": "嵌入式灭火器箱",
   "block.extinguish.auto_water_cannon": "自动消防水炮",
   "block.extinguish.auto_water_cannon_white": "自动消防水炮（白色）",
-  "block.extinguish.demo_oak_planks": "演示用木板",
+  "block.extinguish.demo_oak_planks": "橡木木板（演示用)",
+  "block.extinguish.demo_extinguisher_bracket_single": "灭火器支架（单）（演示用）",
+  "block.extinguish.demo_extinguisher_bracket_double": "灭火器支架（双）（演示用）",
+  "block.extinguish.demo_extinguisher_bracket_builtin": "嵌入式灭火器箱（演示用）",
 
   "item.extinguish.tip.extinguisher_bracket_builtin1": "点击正面开/关门",
   "item.extinguish.tip.extinguisher_bracket_builtin2": "手持完整方块点击侧面设置外壳",
-  "item.extinguish.tip.demo_oak_planks": "易燃但不可燃尽 仅作演示之用"
+  "item.extinguish.tip.demo_oak_planks": "易燃但不可燃尽",
+  "item.extinguish.tip.demo": "仅作演示之用",
+  "item.extinguish.tip.demo_bracket": "一经放入灭火器即可无限拿取",
 
 
+  "warn.extinguish.optifine": "§6§n灭（Extinguish）§r§f检测到安装了§6§n高清修复（Optifine）§r，这会导致兼容性问题。§l强烈建议移除高清修复。§r您也可以选择继续。灭将在一些必要效果上尝试降级渲染，这可能会导致对应方块的异常光照或游戏崩溃。"
 
 }
