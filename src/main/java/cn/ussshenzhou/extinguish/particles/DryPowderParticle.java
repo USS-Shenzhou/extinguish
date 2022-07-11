@@ -170,9 +170,7 @@ public class DryPowderParticle extends TextureSheetParticle {
         @Nullable
         @Override
         public Particle createParticle(DryPowderParticleOption pType, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
-            DryPowderParticle d = new DryPowderParticle(pType.getShooter(), pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
-            d.pickSprite(sprites);
-            return d;
+            return new DryPowderParticle(pType.getShooter(), pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, sprites);
         }
     }
 }

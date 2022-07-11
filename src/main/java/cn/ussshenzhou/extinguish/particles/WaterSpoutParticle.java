@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -29,7 +30,6 @@ public class WaterSpoutParticle extends TextureSheetParticle {
     protected WaterSpoutParticle(UUID shooter, ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet pSprites) {
         super(level, x, y, z, vx, vy, vz);
         this.shooter = shooter;
-        this.sprites = pSprites;
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
@@ -37,10 +37,12 @@ public class WaterSpoutParticle extends TextureSheetParticle {
         this.hasPhysics = true;
         this.gravity = (float) (0.18f + Math.random() * 0.1f);
         this.lifetime = (int) (15 * 20 + Math.random() * 20 * 5);
-        this.setAlpha((float) (0.8 + Math.random() * 0.2));
+        this.setAlpha((float) (0.9 + Math.random() * 0.1));
         float f = 1.0F - (float) (Math.random() * (double) 0.2F);
         this.setColor(f, f, f);
+        this.sprites = pSprites;
         this.pickSprite(pSprites);
+        //this.setSprite(pSprites.get(new Random((long) ((x+y+z)*1000000))));
         this.scale((float) (0.4 + Math.random() * 0.3));
     }
 
@@ -62,9 +64,8 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             this.xd *= (double) this.friction;
             this.yd *= (double) this.friction;
             this.zd *= (double) this.friction;
-            this.setSpriteFromAge(this.sprites);
             if (this.fade) {
-                this.alpha *= 0.995f;
+                this.alpha *= 0.994f;
             }
             //Different client have different particle details.
             //Since particle does not exist on server, only shooter's client is the standard position to detect fire.
@@ -102,7 +103,6 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             if (dy <= 0) {
                 //hit floor
                 this.onGround = true;
-                this.fade = true;
                 this.friction = 0.91f;
                 this.hasPhysics = false;
                 this.gravity = 0;
@@ -110,11 +110,11 @@ public class WaterSpoutParticle extends TextureSheetParticle {
                 //hit ceiling
                 if (Math.random() < stickChance) {
                     this.gravity = 0;
-                    this.fade = true;
                 } else {
                     this.gravity = 0.1f;
                 }
             }
+            this.fade = true;
             //shoot directly down will trigger the other conditions.
             return;
         }
@@ -127,12 +127,12 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             this.friction = 0.87f;
             if (Math.random() < stickChance) {
                 this.gravity = 0;
-                this.fade = true;
             } else {
                 this.gravity = 0.06f;
             }
             return;
         }
+        this.fade = true;
         //hit XOY
         if (dz != pZ) {
             Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.yd, 0.5f);
@@ -142,10 +142,10 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             this.friction = 0.87f;
             if (Math.random() < stickChance) {
                 this.gravity = 0;
-                this.fade = true;
             } else {
                 this.gravity = 0.06f;
             }
+            this.fade = true;
             return;
         }
     }
