@@ -71,10 +71,10 @@ public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracket
     public ItemStack removeItem() {
         ItemStack i;
         if (!itemStacks[0].isEmpty()) {
-            i = itemStacks[0];
+            i = itemStacks[0].copy();
             itemStacks[0] = ItemStack.EMPTY;
         } else {
-            i = itemStacks[1];
+            i = itemStacks[1].copy();
             itemStacks[1] = ItemStack.EMPTY;
         }
         syncFromServer(level,this);
