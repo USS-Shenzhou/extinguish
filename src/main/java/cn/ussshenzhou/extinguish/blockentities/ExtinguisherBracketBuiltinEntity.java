@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,8 +30,8 @@ import java.util.Random;
 /**
  * @author USS_Shenzhou
  */
-public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleEntity{
-    BlockState blockState = Blocks.AIR.defaultBlockState();
+public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleEntity {
+    private BlockState blockState = Blocks.AIR.defaultBlockState();
     private BakedModel disguiseModel;
 
     public ExtinguisherBracketBuiltinEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -58,19 +59,36 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
     public void load(CompoundTag pTag) {
         super.load(pTag);
         this.blockState = NbtUtils.readBlockState(pTag.getCompound("disguise"));
+        if (level==null){
+            needSync = true;
+        } else if (level.isClientSide){
+            setDisguise(blockState);
+        }
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, ExtinguisherBracketBuiltinEntity thisEntity) {
+        thisEntity.syncTick();
+    }
+
+    boolean needSync = false;
+
+    void syncTick() {
+        if (needSync) {
+            syncFromServer(level, this);
+            needSync = false;
+        }
     }
 
     public void setDisguise(BlockState disguiseState) {
-        LogManager.getLogger().debug(disguiseState.toString());
         blockState = disguiseState;
-        if (getLevel().isClientSide){
+        if (level.isClientSide) {
             calculateDisguiseModel(disguiseState);
         }
-        syncFromServer(level,this);
+        syncFromServer(level, this);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void calculateDisguiseModel(BlockState blockState){
+    public void calculateDisguiseModel(BlockState blockState) {
         Direction direction = this.getBlockState().getValue(BlockStateProperties.FACING);
         BakedModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
         List<BakedQuad> quadList = new ArrayList<>();

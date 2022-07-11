@@ -27,6 +27,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nullable;
 
 import java.io.IOException;
@@ -104,21 +105,30 @@ public class ExtinguisherBracketBuiltinEntityRenderer implements BlockEntityRend
     }
 
     private void renderDisguise(ExtinguisherBracketBuiltinEntity pBlockEntity, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        //BakedModel bakedModel = pBlockEntity.getDisguiseModel();
-        if (pBlockEntity.getDisguiseModel()!=null){
+        if (pBlockEntity.getDisguiseModel() != null) {
             pPoseStack.pushPose();
-            Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateWithAO(pBlockEntity.getLevel(),
-                    pBlockEntity.getDisguiseModel(),
-                    pBlockEntity.getDisguiseBlockState(),
-                    pBlockEntity.getBlockPos(),
-                    pPoseStack,
-                    pBufferSource.getBuffer(RenderType.translucent()),
-                    true,
-                    new Random(),
-                    42,
-                    pPackedOverlay,
-                    EmptyModelData.INSTANCE
-            );
+            try {
+                Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateWithAO(pBlockEntity.getLevel(),
+                        pBlockEntity.getDisguiseModel(),
+                        pBlockEntity.getDisguiseBlockState(),
+                        pBlockEntity.getBlockPos(),
+                        pPoseStack,
+                        pBufferSource.getBuffer(RenderType.translucent()),
+                        true,
+                        new Random(),
+                        42,
+                        pPackedOverlay,
+                        EmptyModelData.INSTANCE
+                );
+            } catch (NoSuchMethodError e) {
+                Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
+                        pPoseStack.last(),
+                        pBufferSource.getBuffer(RenderType.translucent()),
+                        pBlockEntity.getDisguiseBlockState(),
+                        pBlockEntity.getDisguiseModel(),
+                        1, 1, 1, pPackedLight, pPackedOverlay, EmptyModelData.INSTANCE
+                );
+            }
             pPoseStack.popPose();
         }
     }
