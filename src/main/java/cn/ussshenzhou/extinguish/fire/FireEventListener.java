@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -85,6 +86,13 @@ public class FireEventListener {
                 LogManager.getLogger().error("An unexpected Exception happened when trying add Auto Water Cannon from buffer to FireManager list." +
                         " Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void removeLevel(WorldEvent.Unload event){
+        if (!event.getWorld().isClientSide()){
+            FireManager.removeLevel((ServerLevel) event.getWorld());
         }
     }
 }

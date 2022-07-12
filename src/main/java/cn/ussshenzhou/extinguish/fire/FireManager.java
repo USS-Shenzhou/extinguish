@@ -2,6 +2,7 @@ package cn.ussshenzhou.extinguish.fire;
 
 import cn.ussshenzhou.extinguish.blockentities.AutoWaterCannonEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,8 @@ import java.util.*;
  * @author USS_Shenzhou
  * <br/>
  * Only on logic server.
+ * <br/>
+ * idea: use WeakReference, by @ustc-zzzz
  */
 public class FireManager {
     private static HashMap<Level, HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> autoWaterCannons = new HashMap<>();
@@ -100,5 +103,10 @@ public class FireManager {
 
     public static HashMap<Level, HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> getAutoWaterCannons() {
         return autoWaterCannons;
+    }
+
+    public static void removeLevel(ServerLevel level) {
+        autoWaterCannons.remove(level);
+        fireBuffer.remove(level);
     }
 }
