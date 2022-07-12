@@ -9,6 +9,7 @@ import cn.ussshenzhou.extinguish.particles.WaterSpoutParticleOption;
 import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
 import java.util.function.Predicate;
@@ -102,9 +104,13 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
         thisEntity.syncFromServer(level, thisEntity);
     }
 
+    /**
+     * The player-seeking distance depends on:
+     * @see cn.ussshenzhou.extinguish.mixin.MixinLevelRenderer#mixinAddParticleInternal(ParticleOptions, boolean, boolean, double, double, double, double, double, double, CallbackInfoReturnable)
+     */
     private void shootWater() {
         ServerLevel serverLevel = (ServerLevel) this.level;
-        Player player = serverLevel.getNearestPlayer(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 128, false);
+        Player player = serverLevel.getNearestPlayer(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 64 - 1, false);
         unattended = (player == null);
         Vec3 pos = getNozzlePos();
         double distance = Math.sqrt(getBlockPos().distToLowCornerSqr(target.getX(), target.getY(), target.getZ()));

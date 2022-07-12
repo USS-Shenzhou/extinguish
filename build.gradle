@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: "org.parchmentmc", name: "librarian", version: "1.+"
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 
@@ -15,6 +16,8 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: "org.parchmentmc.librarian.forgegradle"
 apply plugin: "maven-publish"
 apply plugin: "eclipse"
+apply plugin: 'org.spongepowered.mixin'
+
 group = 'cn.ussshenzhou'
 //also change in mods.toml
 version = '0.1.0.tc'
@@ -160,7 +163,7 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.25'
-
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
@@ -173,7 +176,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
-
+mixin {
+    add sourceSets.main, "mixins.extinguish.refmap.json"
+    config 'mixin.extinguish.json'
+    debug.verbose = true
+    debug.export = true
+}
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {

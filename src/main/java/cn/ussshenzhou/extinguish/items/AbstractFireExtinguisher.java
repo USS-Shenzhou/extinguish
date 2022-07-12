@@ -1,6 +1,7 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,18 +47,13 @@ public abstract class AbstractFireExtinguisher extends Item {
         this.maxTime = maxTime;
     }
 
-    @Override
+    /*@Override
     public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
         if (!pPlayer.level.isClientSide() && pInteractionTarget instanceof Blaze) {
             this.interactWithBlaze(pStack, pPlayer, (Blaze) pInteractionTarget);
         }
         return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
-    }
-
-    protected void interactWithBlaze(ItemStack stack, Player player, Blaze blaze) {
-        //TODO improve
-        blaze.setTarget(null);
-    }
+    }*/
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
@@ -140,7 +136,14 @@ public abstract class AbstractFireExtinguisher extends Item {
         stack.setDamageValue(stack.getDamageValue() + 1);
         if (player.level.isClientSide) {
             shootParticle(player);
+        } else{
+            if (player instanceof ServerPlayer){
+                ServerPlayer serverPlayer = (ServerPlayer) player;
+            }
         }
+    }
+    protected void interactWithBlaze(ItemStack stack, Player player, Blaze blaze) {
+        blaze.setTarget(null);
     }
 
     @Override

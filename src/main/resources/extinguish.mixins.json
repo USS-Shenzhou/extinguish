@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "cn.ussshenzhou.extinguish.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.brighter.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "MixinLevelRenderer"
+  ]
+}
