@@ -164,6 +164,7 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.25'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
@@ -177,8 +178,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 mixin {
-    add sourceSets.main, "mixins.extinguish.refmap.json"
-    config 'mixin.extinguish.json'
+    add sourceSets.main, 'mixins.extinguish.refmap.json'
+    config 'extinguish.mixins.json'
+
     debug.verbose = true
     debug.export = true
 }
