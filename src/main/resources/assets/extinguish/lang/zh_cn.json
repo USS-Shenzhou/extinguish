@@ -21,6 +21,6 @@
   "item.extinguish.tip.demo_bracket": "一经放入灭火器即可无限拿取",
 
 
-  "warn.extinguish.optifine": "§6§n灭（Extinguish）§r§f检测到安装了§6§n高清修复（Optifine）§r，这会导致兼容性问题。§l强烈建议移除高清修复。§r您也可以选择继续。灭将在一些必要效果上尝试降级渲染，这可能会导致对应方块的异常光照或游戏崩溃。"
-
+  "warn.extinguish.optifine": "§6§n灭（Extinguish）§r§f检测到安装了§6§n高清修复（Optifine）§r，这会导致兼容性问题。§l强烈建议移除高清修复。§r您也可以选择继续。灭将在一些必要效果上尝试降级渲染，这可能会导致对应方块的异常光照或游戏崩溃。",
+  "warn.extinguish.particle": "§6§n灭（Extinguish）§r§f的正常工作依赖于粒子效果。强烈建议您将粒子效果调整到§l少量§r或§l全部。"
 }

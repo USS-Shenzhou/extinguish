@@ -21,6 +21,6 @@
   "item.extinguish.tip.demo_bracket": "Infinite supply of extinguishers put in.",
 
 
-    "warn.extinguish.optifine": "§6§nExtinguish§r§f is not compatible with §6§nOptifine.§f Strongly recommend removing Optifine. §rYou can also proceed with NO warranty."
-
+  "warn.extinguish.optifine": "§6§nExtinguish§r§f is not compatible with §6§nOptifine.§f Strongly recommend removing Optifine. §rYou can also proceed with NO warranty.",
+  "warn.extinguish.particle": "§6§nExtinguish§r§f functioning depends on particle effects. It is highly recommended adjusting the particle effect to DECREASED or ALL"
 }
