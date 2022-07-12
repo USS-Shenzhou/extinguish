@@ -104,7 +104,7 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
 
     private void shootWater() {
         ServerLevel serverLevel = (ServerLevel) this.level;
-        Player player = serverLevel.getNearestPlayer(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 100, false);
+        Player player = serverLevel.getNearestPlayer(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 128, false);
         unattended = (player == null);
         Vec3 pos = getNozzlePos();
         double distance = Math.sqrt(getBlockPos().distToLowCornerSqr(target.getX(), target.getY(), target.getZ()));

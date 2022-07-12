@@ -107,28 +107,17 @@ public class ExtinguisherBracketBuiltinEntityRenderer implements BlockEntityRend
     private void renderDisguise(ExtinguisherBracketBuiltinEntity pBlockEntity, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (pBlockEntity.getDisguiseModel() != null) {
             pPoseStack.pushPose();
-            try {
-                Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateWithAO(pBlockEntity.getLevel(),
-                        pBlockEntity.getDisguiseModel(),
-                        pBlockEntity.getDisguiseBlockState(),
-                        pBlockEntity.getBlockPos(),
-                        pPoseStack,
-                        pBufferSource.getBuffer(RenderType.translucent()),
-                        true,
-                        new Random(),
-                        42,
-                        pPackedOverlay,
-                        EmptyModelData.INSTANCE
-                );
-            } catch (NoSuchMethodError e) {
-                Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
-                        pPoseStack.last(),
-                        pBufferSource.getBuffer(RenderType.translucent()),
-                        pBlockEntity.getDisguiseBlockState(),
-                        pBlockEntity.getDisguiseModel(),
-                        1, 1, 1, pPackedLight, pPackedOverlay, EmptyModelData.INSTANCE
-                );
-            }
+            Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateWithAO(pBlockEntity.getLevel(),
+                    pBlockEntity.getDisguiseModel(),
+                    pBlockEntity.getDisguiseBlockState(),
+                    pBlockEntity.getBlockPos(),
+                    pPoseStack,
+                    pBufferSource.getBuffer(RenderType.translucent()),
+                    true,
+                    new Random(),
+                    42,
+                    pPackedOverlay
+            );
             pPoseStack.popPose();
         }
     }

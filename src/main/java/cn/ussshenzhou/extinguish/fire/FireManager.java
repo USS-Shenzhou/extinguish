@@ -18,9 +18,9 @@ import java.util.*;
  * idea: use WeakReference, by @ustc-zzzz
  */
 public class FireManager {
-    private static HashMap<Level, HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> autoWaterCannons = new HashMap<>();
+    private static final HashMap<Level, HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> autoWaterCannons = new HashMap<>();
 
-    private static HashMap<Level, LinkedHashSet<BlockPos>> fireBuffer = new HashMap<>();
+    private static final HashMap<Level, LinkedHashSet<BlockPos>> fireBuffer = new HashMap<>();
 
     public static void addAutoWaterCannon(AutoWaterCannonEntity autoWaterCannonEntity) {
         Level level = autoWaterCannonEntity.getLevel();

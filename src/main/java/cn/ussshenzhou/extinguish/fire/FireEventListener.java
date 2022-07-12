@@ -60,31 +60,31 @@ public class FireEventListener {
                     iterator.remove();
                 }
                 i++;
-                if (i >= 10) {
+                /*if (i >= 10) {
                     return;
-                }
+                }*/
             }
         }
     }
 
-    private static LinkedList<AutoWaterCannonEntity> autoWaterCannonEntities = new LinkedList<>();
+    private static final LinkedList<AutoWaterCannonEntity> autoWaterCannonEntities = new LinkedList<>();
 
     public static void addAutoWaterCannonEntity(AutoWaterCannonEntity autoWaterCannonEntity) {
         autoWaterCannonEntities.add(autoWaterCannonEntity);
     }
 
     private static void addAutoWaterCannonToManager() {
-        if (!autoWaterCannonEntities.isEmpty()) {
-            //TODO find a better way
-            //rarely cause a nullPointerExp. Can't find why.
-            try {
-                for (AutoWaterCannonEntity a : autoWaterCannonEntities) {
-                    FireManager.addAutoWaterCannon(a);
+        synchronized (autoWaterCannonEntities){
+            if (!autoWaterCannonEntities.isEmpty()) {
+                try {
+                    for (AutoWaterCannonEntity a : autoWaterCannonEntities) {
+                        FireManager.addAutoWaterCannon(a);
+                    }
+                    autoWaterCannonEntities.clear();
+                } catch (NullPointerException ignored){
+                    LogManager.getLogger().error("An unexpected Exception happened when trying add Auto Water Cannon from buffer to FireManager list." +
+                            " Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
                 }
-                autoWaterCannonEntities.clear();
-            } catch (NullPointerException ignored){
-                LogManager.getLogger().error("An unexpected Exception happened when trying add Auto Water Cannon from buffer to FireManager list." +
-                        " Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
             }
         }
     }

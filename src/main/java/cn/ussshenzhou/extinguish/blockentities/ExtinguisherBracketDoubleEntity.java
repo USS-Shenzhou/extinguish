@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author USS_Shenzhou
  */
 public class ExtinguisherBracketDoubleEntity extends AbstractExtinguisherBracketEntity{
-    private ItemStack[] itemStacks = {ItemStack.EMPTY, ItemStack.EMPTY};
+    protected ItemStack[] itemStacks = {ItemStack.EMPTY, ItemStack.EMPTY};
 
     public ExtinguisherBracketDoubleEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);

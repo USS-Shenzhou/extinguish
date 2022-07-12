@@ -1,5 +1,7 @@
 package cn.ussshenzhou.extinguish.blockentities;
 
+import cn.ussshenzhou.extinguish.blockentities.AutoWaterCannonEntity;
+import cn.ussshenzhou.extinguish.blockentities.ModBlockEntityTypeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
