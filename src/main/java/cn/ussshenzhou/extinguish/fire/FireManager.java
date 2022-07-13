@@ -24,13 +24,15 @@ public class FireManager {
 
     public static void addAutoWaterCannon(AutoWaterCannonEntity autoWaterCannonEntity) {
         Level level = autoWaterCannonEntity.getLevel();
-        checkLevel(level);
-        ChunkPos c = new ChunkPos(autoWaterCannonEntity.getBlockPos());
-        HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(level);
-        if (h.containsKey(c)) {
-            h.get(c).add(autoWaterCannonEntity);
-        } else {
-            h.put(c, new LinkedHashSet<>(List.of(autoWaterCannonEntity)));
+        if (level.getBlockEntity(autoWaterCannonEntity.getBlockPos()) instanceof AutoWaterCannonEntity){
+            checkLevel(level);
+            ChunkPos c = new ChunkPos(autoWaterCannonEntity.getBlockPos());
+            HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(level);
+            if (h.containsKey(c)) {
+                h.get(c).add(autoWaterCannonEntity);
+            } else {
+                h.put(c, new LinkedHashSet<>(List.of(autoWaterCannonEntity)));
+            }
         }
     }
 

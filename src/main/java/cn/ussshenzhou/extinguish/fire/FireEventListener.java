@@ -80,10 +80,12 @@ public class FireEventListener {
                     for (AutoWaterCannonEntity a : autoWaterCannonEntities) {
                         FireManager.addAutoWaterCannon(a);
                     }
-                    autoWaterCannonEntities.clear();
+                    LogManager.getLogger().debug(autoWaterCannonEntities.toString());
                 } catch (NullPointerException ignored){
                     LogManager.getLogger().error("An unexpected Exception happened when trying add Auto Water Cannon from buffer to FireManager list." +
                             " Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
+                } finally {
+                    autoWaterCannonEntities.clear();
                 }
             }
         }

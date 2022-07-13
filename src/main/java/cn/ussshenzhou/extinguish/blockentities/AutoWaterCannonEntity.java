@@ -100,6 +100,7 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
 
     /**
      * The player-seeking distance depends on:
+     *
      * @see cn.ussshenzhou.extinguish.mixin.MixinLevelRenderer#mixinAddParticleInternal(ParticleOptions, boolean, boolean, double, double, double, double, double, double, CallbackInfoReturnable)
      */
     private void shootWater() {
@@ -303,7 +304,11 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
 
     @Override
     public int hashCode() {
-        return this.level.dimension().location().hashCode() + this.getBlockPos().hashCode();
+        if (this.level != null) {
+            return this.level.dimension().location().hashCode() + this.getBlockPos().hashCode() + this.getClass().getName().hashCode();
+        } else {
+            return this.getBlockPos().hashCode() + this.getClass().getName().hashCode();
+        }
     }
 
     @Override
@@ -315,5 +320,14 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
             return true;
         }
         return ((AutoWaterCannonEntity) obj).level.dimension().location().equals(this.level.dimension().location()) && ((AutoWaterCannonEntity) obj).getBlockPos().equals(this.getBlockPos());
+    }
+
+    @Override
+    public String toString() {
+        if (this.level != null) {
+            return this.getClass().getName() + "@" + this.level.dimension().location() + "@" + this.getBlockPos().toShortString();
+        } else {
+            return this.getClass().getName() + "@" + this.getBlockPos().toShortString();
+        }
     }
 }
