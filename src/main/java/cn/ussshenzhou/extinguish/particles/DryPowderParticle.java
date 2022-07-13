@@ -34,14 +34,14 @@ public class DryPowderParticle extends TextureSheetParticle {
         this.zd = vz;
         this.friction = 0.92f;
         this.hasPhysics = true;
-        this.gravity = (float) (0.2f + Math.random() * 0.05f);
-        this.lifetime = (int) (15 * 20 + Math.random() * 20 * 5);
-        this.setAlpha((float) (0.9 + Math.random() * 0.1));
-        float f = 1.0F - (float) (Math.random() * (double) 0.2F);
+        this.gravity = 0.2f + random.nextFloat() * 0.05f;
+        this.lifetime = (int) (15 * 20 + random.nextFloat()* 20 * 5);
+        this.setAlpha(0.9f + random.nextFloat() * 0.1f);
+        float f = 1.0F - (random.nextFloat() *  0.2F);
         this.setColor(f, f, f);
         this.sprites = pSprites;
         this.pickSprite(pSprites);
-        this.scale((float) (0.7 + Math.random() * 0.5));
+        this.scale(0.7f + random.nextFloat() * 0.5f);
     }
 
     @Override
@@ -60,9 +60,9 @@ public class DryPowderParticle extends TextureSheetParticle {
             //player interact
             Player player = this.level.getNearestPlayer(this.x, this.y, this.z, 0.7, false);
             if (player != null) {
-                this.xd += player.getDeltaMovement().x * Math.random() * 0.3;
-                this.zd += player.getDeltaMovement().z * Math.random() * 0.3;
-                this.yd += Math.max(player.getDeltaMovement().y * 0.12, 0.12 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z));
+                this.xd += player.getDeltaMovement().x * random.nextFloat() * 0.3;
+                this.zd += player.getDeltaMovement().z * random.nextFloat() * 0.3;
+                this.yd += (0.6 + random.nextFloat() * 0.4) * Math.max(player.getDeltaMovement().y * 0.12, 0.12 * Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z));
                 this.onGround = false;
                 this.gravity = 0.08f;
             }
@@ -109,7 +109,7 @@ public class DryPowderParticle extends TextureSheetParticle {
             if (!bouncedOnce) {
                 Vec2 v = ModParticleHelper.spreadOnCollision(random, r2, this.xd, this.zd);
                 this.xd = v.x;
-                this.yd = -dy * (0.3 + Math.random() * 0.6);
+                this.yd = -dy * (0.3 + random.nextDouble() * 0.6);
                 this.zd = v.y;
                 bouncedOnce = true;
                 this.gravity = 0.1f;
@@ -134,7 +134,7 @@ public class DryPowderParticle extends TextureSheetParticle {
                     this.gravity = 0.08f;
                 }
             } else {
-                this.xd = -dy * (0.3 + Math.random() * 0.4);
+                this.xd = -dy * (0.3 + random.nextDouble() * 0.4);
             }
             bouncedOnce = true;
             return;
@@ -153,7 +153,7 @@ public class DryPowderParticle extends TextureSheetParticle {
                     this.gravity = 0.08f;
                 }
             } else {
-                this.zd = -dy * (0.3 + Math.random() * 0.4);
+                this.zd = -dy * (0.3 + random.nextDouble() * 0.4);
             }
             bouncedOnce = true;
         }
