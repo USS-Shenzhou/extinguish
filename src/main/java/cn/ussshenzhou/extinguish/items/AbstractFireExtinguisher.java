@@ -2,6 +2,10 @@ package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -25,9 +29,11 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * @author USS_Shenzhou
@@ -35,6 +41,8 @@ import java.util.Random;
 public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
     private int duration = 0;
+    private static final Predicate<Entity> ALL_BUT_SPECTATOR = entity -> !entity.isSpectator();
+    private static final double INTERACT_DISTANCE = 7;
 
     MovableSoundInstance soundInstanceBuffer = null;
 
@@ -62,7 +70,7 @@ public abstract class AbstractFireExtinguisher extends Item {
             duration = maxTime - stack.getDamageValue();
             pPlayer.startUsingItem(pUsedHand);
             stack.getOrCreateTag().putBoolean("usingAnime", true);
-            if (pLevel.isClientSide){
+            if (pLevel.isClientSide) {
                 startSound(pLevel, pPlayer);
             }
             return InteractionResultHolder.consume(stack);
@@ -82,7 +90,7 @@ public abstract class AbstractFireExtinguisher extends Item {
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
         pStack.getOrCreateTag().putBoolean("usingAnime", false);
-        if (pLevel.isClientSide){
+        if (pLevel.isClientSide) {
             stopSound(pLevel);
         }
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
@@ -91,7 +99,7 @@ public abstract class AbstractFireExtinguisher extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         pStack.getOrCreateTag().putBoolean("usingAnime", false);
-        if (pLevel.isClientSide){
+        if (pLevel.isClientSide) {
             stopSound(pLevel);
         }
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
@@ -131,18 +139,59 @@ public abstract class AbstractFireExtinguisher extends Item {
         return maxTime;
     }
 
+    private Entity interactBuffer = null;
+    protected int interactCounter = 0;
+
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         stack.setDamageValue(stack.getDamageValue() + 1);
         if (player.level.isClientSide) {
             shootParticle(player);
-        } else{
-            if (player instanceof ServerPlayer){
+        } else {
+            if (player instanceof ServerPlayer) {
                 ServerPlayer serverPlayer = (ServerPlayer) player;
+                Vec3 from = serverPlayer.getEyePosition();
+                Vec3 extend = player.getViewVector(1).scale(6.5);
+                Vec3 to = from.add(extend);
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(player, from, to,
+                        player.getBoundingBox().expandTowards(extend).inflate(1.0D),
+                        ALL_BUT_SPECTATOR,
+                        INTERACT_DISTANCE * INTERACT_DISTANCE
+                );
+                if (entityHitResult == null) {
+                    interactBuffer = null;
+                    interactCounter = 0;
+                } else {
+                    Entity entity = entityHitResult.getEntity();
+                    if (interactBuffer == null || interactBuffer.getId() != entity.getId()) {
+                        interactBuffer = entity;
+                        interactCounter = 1;
+                    } else {
+                        interactCounter++;
+                    }
+                    doInteract();
+                }
             }
         }
     }
-    protected void interactWithBlaze(ItemStack stack, Player player, Blaze blaze) {
+
+    protected void doInteract() {
+        if (interactCounter >= 5) {
+            if (interactBuffer instanceof Blaze) {
+                interactWithBlaze((Blaze) interactBuffer);
+            } else if (interactBuffer instanceof Player) {
+                interactWithPlayer((Player) interactBuffer);
+            } else {
+                interactWithOtherEntity(interactBuffer);
+            }
+        }
+    }
+
+    protected abstract void interactWithOtherEntity(Entity entity);
+
+    protected abstract void interactWithPlayer(Player player);
+
+    protected void interactWithBlaze(Blaze blaze) {
         blaze.setTarget(null);
     }
 

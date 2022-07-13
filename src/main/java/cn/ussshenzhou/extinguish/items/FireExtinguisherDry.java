@@ -4,6 +4,9 @@ import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
 import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -29,6 +32,15 @@ public class FireExtinguisherDry extends AbstractFireExtinguisher {
             soundInstanceBuffer = new MovableSoundInstance(pPlayer, ModSoundsRegistry.DRY_SHOOT.get(), SoundSource.PLAYERS, 1.1f, 1.05f, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ());
             Minecraft.getInstance().getSoundManager().play(soundInstanceBuffer);
         }
+    }
+
+    @Override
+    protected void interactWithOtherEntity(Entity entity) {
+
+    }
+
+    @Override
+    protected void interactWithPlayer(Player player) {
     }
 
     @Override
