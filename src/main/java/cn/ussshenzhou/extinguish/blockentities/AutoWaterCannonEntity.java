@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
@@ -60,11 +61,19 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
 
     public AutoWaterCannonEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
-        FireEventListener.addAutoWaterCannonEntity(this);
+        //FireEventListener.addAutoWaterCannonEntity(this);
     }
 
     public AutoWaterCannonEntity(BlockPos pWorldPosition, BlockState pBlockState) {
         this(ModBlockEntityTypeRegistry.AUTO_WATER_CANNON_BLOCK_ENTITY.get(), pWorldPosition, pBlockState);
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (!this.level.isClientSide()){
+            FireManager.addAutoWaterCannon(this);
+        }
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AutoWaterCannonEntity thisEntity) {
@@ -105,7 +114,7 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
      */
     private void shootWater() {
         ServerLevel serverLevel = (ServerLevel) this.level;
-        Player player = serverLevel.getNearestPlayer(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 64 - 1, false);
+        Player player = serverLevel.getNearestPlayer(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 64, false);
         unattended = (player == null);
         Vec3 pos = getNozzlePos();
         double distance = Math.sqrt(getBlockPos().distToLowCornerSqr(target.getX(), target.getY(), target.getZ()));

@@ -27,7 +27,6 @@ public abstract class MixinLevelRenderer {
     @Final
     private Minecraft minecraft;
 
-    @SuppressWarnings("AlibabaAbstractMethodOrInterfaceMethodMustUseJavadoc")
     @Shadow
     protected abstract ParticleStatus calculateParticleLevel(boolean pDecreased);
 
@@ -37,7 +36,6 @@ public abstract class MixinLevelRenderer {
      * This would effect:
      * @see AutoWaterCannonEntity#shootWater()
      */
-    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Inject(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At("HEAD"), cancellable = true)
     private void mixinAddParticleInternal(ParticleOptions pOptions, boolean pForce, boolean pDecreased, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, CallbackInfoReturnable<Particle> cir) {
         Camera camera = this.minecraft.gameRenderer.getMainCamera();

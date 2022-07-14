@@ -7,6 +7,7 @@ import net.minecraft.util.TimeUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +40,6 @@ public class FireEventListener {
     @SubscribeEvent
     public static void onLevelTick(TickEvent.WorldTickEvent event) {
         if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.haveTime()) {
-            addAutoWaterCannonToManager();
             checkFireBufferOnServerTick(event);
         }
     }
@@ -63,31 +63,6 @@ public class FireEventListener {
                 /*if (i >= 10) {
                     return;
                 }*/
-            }
-        }
-    }
-
-    private static final LinkedList<AutoWaterCannonEntity> autoWaterCannonEntities = new LinkedList<>();
-
-    public static void addAutoWaterCannonEntity(AutoWaterCannonEntity autoWaterCannonEntity) {
-        autoWaterCannonEntities.add(autoWaterCannonEntity);
-    }
-
-    private static void addAutoWaterCannonToManager() {
-        synchronized (autoWaterCannonEntities){
-            if (!autoWaterCannonEntities.isEmpty()) {
-                try {
-                    for (AutoWaterCannonEntity a : autoWaterCannonEntities) {
-                        FireManager.addAutoWaterCannon(a);
-                    }
-                } catch (NullPointerException e){
-                    LogManager.getLogger().error("An unexpected Exception happened when trying add Auto Water Cannon from buffer to FireManager list." +
-                            " Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author. Here is more information:");
-                    LogManager.getLogger().error(autoWaterCannonEntities.toString());
-                    LogManager.getLogger().error(e.getMessage());
-                } finally {
-                    autoWaterCannonEntities.clear();
-                }
             }
         }
     }

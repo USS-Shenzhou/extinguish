@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -18,26 +19,24 @@ import java.util.*;
  * idea: use WeakReference, by @ustc-zzzz
  */
 public class FireManager {
-    private static final HashMap<Level, HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> autoWaterCannons = new HashMap<>();
+    private static final ConcurrentHashMap<Level, ConcurrentHashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> autoWaterCannons = new ConcurrentHashMap<>();
 
-    private static final HashMap<Level, LinkedHashSet<BlockPos>> fireBuffer = new HashMap<>();
+    private static final ConcurrentHashMap<Level, LinkedHashSet<BlockPos>> fireBuffer = new ConcurrentHashMap<>();
 
     public static void addAutoWaterCannon(AutoWaterCannonEntity autoWaterCannonEntity) {
         Level level = autoWaterCannonEntity.getLevel();
-        if (level.getBlockEntity(autoWaterCannonEntity.getBlockPos()) instanceof AutoWaterCannonEntity){
-            checkLevel(level);
-            ChunkPos c = new ChunkPos(autoWaterCannonEntity.getBlockPos());
-            HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(level);
-            if (h.containsKey(c)) {
-                h.get(c).add(autoWaterCannonEntity);
-            } else {
-                h.put(c, new LinkedHashSet<>(List.of(autoWaterCannonEntity)));
-            }
+        checkLevel(level);
+        ChunkPos c = new ChunkPos(autoWaterCannonEntity.getBlockPos());
+        ConcurrentHashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(level);
+        if (h.containsKey(c)) {
+            h.get(c).add(autoWaterCannonEntity);
+        } else {
+            h.put(c, new LinkedHashSet<>(List.of(autoWaterCannonEntity)));
         }
     }
 
     public static void removeAutoWaterCannon(AutoWaterCannonEntity autoWaterCannonEntity) {
-        HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(autoWaterCannonEntity.getLevel());
+        ConcurrentHashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(autoWaterCannonEntity.getLevel());
         if (h != null) {
             ChunkPos c = new ChunkPos(autoWaterCannonEntity.getBlockPos());
             if (h.get(c) != null) {
@@ -45,7 +44,8 @@ public class FireManager {
             } else {
                 LogManager.getLogger().error("Failed trying remove Auto Water Cannon at "
                         + autoWaterCannonEntity.getBlockPos().toShortString()
-                        + "from FireManager list. Recommend rebooting the game/server. This rarely happens. If you constantly meet this problem, please contact mod author.");
+                        + "from FireManager list. The chunk map is null. If you want, I recommend rebooting the game/server. "
+                        + "This rarely happens. If you constantly meet this problem, please contact mod author.");
             }
         }
     }
@@ -60,7 +60,7 @@ public class FireManager {
 
     public static boolean fire(Level level, BlockPos firePos) {
         checkLevel(level);
-        HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(level);
+        ConcurrentHashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>> h = autoWaterCannons.get(level);
         ChunkPos fireChunk = new ChunkPos(firePos);
         for (int x = -1; x < 2; x++) {
             for (int z = -1; z < 2; z++) {
@@ -84,26 +84,20 @@ public class FireManager {
         fireList.add(blockPos);
     }
 
-    public static void removeFireFromBuffer(Level level, BlockPos blockPos) {
-        checkLevel(level);
-        LinkedHashSet<BlockPos> fireList = fireBuffer.get(level);
-        fireList.remove(blockPos);
-    }
-
     private static void checkLevel(Level level) {
         if (!autoWaterCannons.containsKey(level)) {
-            autoWaterCannons.put(level, new HashMap<>());
+            autoWaterCannons.put(level, new ConcurrentHashMap<>());
         }
         if (!fireBuffer.containsKey(level)) {
             fireBuffer.put(level, new LinkedHashSet<>());
         }
     }
 
-    public static HashMap<Level, LinkedHashSet<BlockPos>> getFireBuffer() {
+    public static ConcurrentHashMap<Level, LinkedHashSet<BlockPos>> getFireBuffer() {
         return fireBuffer;
     }
 
-    public static HashMap<Level, HashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> getAutoWaterCannons() {
+    public static ConcurrentHashMap<Level, ConcurrentHashMap<ChunkPos, LinkedHashSet<AutoWaterCannonEntity>>> getAutoWaterCannons() {
         return autoWaterCannons;
     }
 
