@@ -189,7 +189,9 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     protected abstract void interactWithOtherEntity(Entity entity);
 
-    protected abstract void interactWithPlayer(Player player);
+    protected void interactWithPlayer(Player player) {
+        interactWithOtherEntity(player);
+    }
 
     protected void interactWithBlaze(Blaze blaze) {
         blaze.setTarget(null);

@@ -5,6 +5,7 @@ import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
 //import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,12 +35,10 @@ public class FireExtinguisherCo2 extends AbstractFireExtinguisher {
 
     @Override
     protected void interactWithOtherEntity(Entity entity) {
-        entity.setAirSupply(entity.getAirSupply() - 6);
-    }
-
-    @Override
-    protected void interactWithPlayer(Player player) {
-        interactWithOtherEntity(player);
+        entity.setAirSupply(entity.getAirSupply() - 7);
+        if (interactCounter % 20 == 0 && entity.getAirSupply() <= 0) {
+            entity.hurt(DamageSource.MAGIC, 1);
+        }
     }
 
     @Override

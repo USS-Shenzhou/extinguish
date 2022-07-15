@@ -47,12 +47,10 @@ public class FireExtinguisherWater extends AbstractFireExtinguisher {
     protected void interactWithOtherEntity(Entity entity) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, interactCounter * 10, 0));
+            if (interactCounter % 20 == 0) {
+                entity.hurt(DamageSource.MAGIC, 0.5f);
+            }
         }
-    }
-
-    @Override
-    protected void interactWithPlayer(Player player) {
-        interactWithOtherEntity(player);
     }
 
     @Override

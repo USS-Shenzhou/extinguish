@@ -4,6 +4,7 @@ import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
 import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -36,11 +37,12 @@ public class FireExtinguisherDry extends AbstractFireExtinguisher {
 
     @Override
     protected void interactWithOtherEntity(Entity entity) {
-
-    }
-
-    @Override
-    protected void interactWithPlayer(Player player) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.BLINDNESS, interactCounter, 0));
+            if (interactCounter % 20 == 0) {
+                entity.hurt(DamageSource.MAGIC, 0.5f);
+            }
+        }
     }
 
     @Override
