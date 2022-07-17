@@ -39,14 +39,17 @@ public class ModParticleHelper {
     /**
      * @see net.minecraft.world.entity.projectile.ThrownPotion#dowseFire(BlockPos)
      */
-    public static void putOut(BlockPos pos) {
+    public static void putOut(BlockPos pos,boolean giveSpark) {
         Level level = Minecraft.getInstance().level;
         BlockState blockState = level.getBlockState(pos);
-        Block block = level.getBlockState(pos).getBlock();
         if (FireHelper.isFire(blockState)) {
             ResourceKey<Level> l = level.dimension();
             ResourceLocation resourceLocation = l.location();
-            PutOutFirePackSend.channel.sendToServer(new PutOutFirePack(pos, resourceLocation));
+            PutOutFirePackSend.channel.sendToServer(new PutOutFirePack(pos, resourceLocation,giveSpark));
         }
+    }
+    //------demo only------
+    public static void putOut(BlockPos pos){
+        putOut(pos,false);
     }
 }

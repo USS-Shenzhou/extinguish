@@ -1,14 +1,17 @@
 package cn.ussshenzhou.extinguish.network;
 
 import cn.ussshenzhou.extinguish.fire.FireHelper;
+import cn.ussshenzhou.extinguish.items.ModItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,20 +30,35 @@ import java.util.function.Supplier;
 public class PutOutFirePack {
     private BlockPos blockPos;
     private ResourceLocation dimension;
+    //------demo only------
+    private boolean giveSpark;
 
     public PutOutFirePack(FriendlyByteBuf buf) {
         this.blockPos = buf.readBlockPos();
         this.dimension = buf.readResourceLocation();
+        //------demo only------
+        this.giveSpark = buf.readBoolean();
     }
 
     public PutOutFirePack(BlockPos blockPos, ResourceLocation dimension) {
         this.blockPos = blockPos;
         this.dimension = dimension;
+        //------demo only------
+        this.giveSpark = false;
+    }
+
+    public PutOutFirePack(BlockPos blockPos, ResourceLocation dimension, boolean giveSpark) {
+        this.blockPos = blockPos;
+        this.dimension = dimension;
+        //------demo only------
+        this.giveSpark = giveSpark;
     }
 
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeBlockPos(blockPos);
         buf.writeResourceLocation(dimension);
+        //------demo only------
+        buf.writeBoolean(giveSpark);
     }
 
 
@@ -53,7 +71,10 @@ public class PutOutFirePack {
                         Level level = minecraftServer.getLevel(key);
                         if (level != null) {
                             BlockState blockState = level.getBlockState(blockPos);
-                            FireHelper.putOut(level, blockState, this.blockPos, context.get().getSender());
+                            ServerPlayer player = context.get().getSender();
+                            if (FireHelper.putOut(level, blockState, this.blockPos, player) && this.giveSpark) {
+                                player.addItem(new ItemStack(ModItemRegistry.DEMO_ASH.get()));
+                            }
                         }
                     } else {
                     }

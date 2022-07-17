@@ -105,4 +105,15 @@ public class ModItemRegistry {
         translatableComponent2.setStyle(item.getDescription().getStyle().withColor(0xaa0000));
         pTooltip.add(translatableComponent2);
     }
+    public static final RegistryObject<Item> DEMO_ASH = ITEMS.register("demo_ash",()->
+            new Item(new Item.Properties().tab(ModItemGroups.MAIN)){
+                @Override
+                public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+                    super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+                    TranslatableComponent translatableComponent1 = new TranslatableComponent("item.extinguish.tip.demo_ash");
+                    translatableComponent1.setStyle(this.getDescription().getStyle().withColor(0xaa0000));
+                    pTooltipComponents.add(translatableComponent1);
+                }
+            }
+            );
 }

@@ -9,18 +9,22 @@
   "block.extinguish.extinguisher_bracket_builtin": "Embedded Extinguisher Cabinet",
   "block.extinguish.auto_water_cannon": "Auto Water Cannon",
   "block.extinguish.auto_water_cannon_white": "Auto Water Cannon (white)",
+
+  "item.extinguish.tip.extinguisher_bracket_builtin1": "Hit the front to open/close the door.",
+  "item.extinguish.tip.extinguisher_bracket_builtin2": "Hit other sides while holding a block to set a disguise.",
+
+  "warn.extinguish.optifine": "§6§nExtinguish§r§f is not compatible with §6§nOptifine.§f Strongly recommend removing Optifine. §rYou can also proceed with NO warranty.",
+  "warn.extinguish.particle": "§6§nExtinguish§r§f functioning depends on particle effects. It is highly recommended adjusting the particle effect to DECREASED or ALL",
+
   "block.extinguish.demo_oak_planks": "Oak Planks (demo.)",
   "block.extinguish.demo_extinguisher_bracket_single": "Extinguisher Bracket (single) (demo.)",
   "block.extinguish.demo_extinguisher_bracket_double": "Extinguisher Bracket (double) (demo.)",
   "block.extinguish.demo_extinguisher_bracket_builtin": "Embedded Extinguisher Cabinet (demo.)",
-
-  "item.extinguish.tip.extinguisher_bracket_builtin1": "Hit the front to open/close the door.",
-  "item.extinguish.tip.extinguisher_bracket_builtin2": "Hit other sides while holding a block to set a disguise.",
   "item.extinguish.tip.demo_oak_planks": "Flammable but not burn-out-able.",
   "item.extinguish.tip.demo": "Only for demonstration.",
   "item.extinguish.tip.demo_bracket": "Infinite supply of extinguishers put in.",
 
-
-  "warn.extinguish.optifine": "§6§nExtinguish§r§f is not compatible with §6§nOptifine.§f Strongly recommend removing Optifine. §rYou can also proceed with NO warranty.",
-  "warn.extinguish.particle": "§6§nExtinguish§r§f functioning depends on particle effects. It is highly recommended adjusting the particle effect to DECREASED or ALL"
+  "item.extinguish.demo_ash": "Extinguished Fire",
+  "item.nocaet.demo_ash.clue": "After fire extinguished.",
+  "item.extinguish.tip.demo_ash": "Fire. Spark. Ash."
 }

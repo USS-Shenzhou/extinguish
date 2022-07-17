@@ -30,16 +30,20 @@ public class FireHelper {
     /**
      * @see net.minecraft.world.entity.projectile.ThrownPotion#dowseFire(BlockPos)
      */
-    public static void putOut(Level level, BlockState blockState, BlockPos blockPos, @Nullable Entity entity) {
+    public static boolean putOut(Level level, BlockState blockState, BlockPos blockPos, @Nullable Entity entity) {
         if (blockState.is(BlockTags.FIRE)) {
             level.removeBlock(blockPos, false);
+            return true;
         } else if (AbstractCandleBlock.isLit(blockState)) {
             AbstractCandleBlock.extinguish((Player) null, blockState, level, blockPos);
+            return true;
         } else if (CampfireBlock.isLitCampfire(blockState)) {
             level.levelEvent((Player) null, 1009, blockPos, 0);
             CampfireBlock.dowse(entity, level, blockPos, blockState);
             level.setBlockAndUpdate(blockPos, blockState.setValue(CampfireBlock.LIT, Boolean.valueOf(false)));
+            return true;
         }
+        return false;
     }
 
     public static boolean canSee(Level level, Vec3 from, Vec3 to) {
