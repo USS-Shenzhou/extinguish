@@ -72,7 +72,11 @@ public class PutOutFirePack {
                         if (level != null) {
                             BlockState blockState = level.getBlockState(blockPos);
                             ServerPlayer player = context.get().getSender();
-                            if (FireHelper.putOut(level, blockState, this.blockPos, player) && this.giveSpark) {
+                            if (FireHelper.putOut(level, blockState, this.blockPos, player)
+                                    //------demo only------
+                                    && this.giveSpark
+                                    && player != null
+                                    && Math.random() < 0.333) {
                                 player.addItem(new ItemStack(ModItemRegistry.DEMO_ASH.get()));
                             }
                         }
