@@ -69,7 +69,7 @@ public class PutOutFirePack {
                         MinecraftServer minecraftServer = (MinecraftServer) LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER);
                         ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, dimension);
                         Level level = minecraftServer.getLevel(key);
-                        if (level != null) {
+                        if (level != null && level.isLoaded(blockPos)) {
                             BlockState blockState = level.getBlockState(blockPos);
                             ServerPlayer player = context.get().getSender();
                             if (FireHelper.putOut(level, blockState, this.blockPos, player)
