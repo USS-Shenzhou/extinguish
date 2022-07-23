@@ -30,7 +30,7 @@ public class FireEventListener {
     public static void detectFireBlock(BlockEvent.NeighborNotifyEvent event) {
         //NeighborNotifyEvent only called on server
         BlockState blockState = event.getState();
-        if (FireHelper.isFire(blockState)) {
+        if (((Level) event.getWorld()).dimension() != Level.NETHER && FireHelper.isFire(blockState)) {
             if (!FireManager.fire((ServerLevel) event.getWorld(), event.getPos())) {
                 FireManager.addFireToBuffer((ServerLevel) event.getWorld(), event.getPos());
             }
@@ -55,7 +55,7 @@ public class FireEventListener {
                     break;
                 }
                 BlockPos firePos = iterator.next();
-                if(!level.isLoaded(firePos)){
+                if (!level.isLoaded(firePos)) {
                     continue;
                 }
                 if (FireHelper.isFire(level.getBlockState(firePos))) {
