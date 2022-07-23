@@ -51,6 +51,9 @@ public class FireEventListener {
             long mill = System.currentTimeMillis();
             Iterator<BlockPos> iterator = fires.iterator();
             while (iterator.hasNext()) {
+                if (System.currentTimeMillis() > mill + 5) {
+                    break;
+                }
                 BlockPos firePos = iterator.next();
                 if(!level.isLoaded(firePos)){
                     continue;
@@ -61,9 +64,6 @@ public class FireEventListener {
                     }
                 } else {
                     iterator.remove();
-                }
-                if (System.currentTimeMillis() > mill + 5) {
-                    break;
                 }
             }
         }
