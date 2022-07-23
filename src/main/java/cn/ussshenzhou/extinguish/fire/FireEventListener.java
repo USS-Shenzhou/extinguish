@@ -48,7 +48,7 @@ public class FireEventListener {
         Level level = event.world;
         LinkedHashSet<BlockPos> fires = FireManager.getFireBuffer().get(level);
         if (fires != null) {
-            if (fires.size() > 500) {
+            if (fires.size() > 200) {
                 LogManager.getLogger().warn("Fire buffer is too big with a amount of "
                         + fires.size()
                         + " in world "
