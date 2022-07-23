@@ -48,28 +48,27 @@ public class FireEventListener {
         Level level = event.world;
         LinkedHashSet<BlockPos> fires = FireManager.getFireBuffer().get(level);
         if (fires != null) {
-            int i = 0;
+            long mill = System.currentTimeMillis();
             Iterator<BlockPos> iterator = fires.iterator();
             while (iterator.hasNext()) {
                 BlockPos firePos = iterator.next();
-                if (FireHelper.isFire(level.getBlockState(firePos))) {
+                if (level.isLoaded(firePos) && FireHelper.isFire(level.getBlockState(firePos))) {
                     if (FireManager.fire(level, firePos)) {
                         iterator.remove();
                     }
                 } else {
                     iterator.remove();
                 }
-                i++;
-                /*if (i >= 10) {
-                    return;
-                }*/
+                if (System.currentTimeMillis() > mill + 5) {
+                    break;
+                }
             }
         }
     }
 
     @SubscribeEvent
-    public static void removeLevel(WorldEvent.Unload event){
-        if (!event.getWorld().isClientSide()){
+    public static void removeLevel(WorldEvent.Unload event) {
+        if (!event.getWorld().isClientSide()) {
             FireManager.removeLevel((ServerLevel) event.getWorld());
         }
     }

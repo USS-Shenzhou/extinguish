@@ -40,7 +40,6 @@ import java.util.function.Predicate;
  */
 public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
-    private int duration = 0;
     private static final Predicate<Entity> ALL_BUT_SPECTATOR = entity -> !entity.isSpectator();
     private static final double INTERACT_DISTANCE = 7;
 
@@ -67,7 +66,6 @@ public abstract class AbstractFireExtinguisher extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
         if (stack.getDamageValue() < maxTime - 1) {
-            duration = maxTime - stack.getDamageValue();
             pPlayer.startUsingItem(pUsedHand);
             stack.getOrCreateTag().putBoolean("usingAnime", true);
             if (pLevel.isClientSide) {
@@ -75,7 +73,6 @@ public abstract class AbstractFireExtinguisher extends Item {
             }
             return InteractionResultHolder.consume(stack);
         }
-        duration = 0;
         return InteractionResultHolder.fail(stack);
     }
 
@@ -148,8 +145,7 @@ public abstract class AbstractFireExtinguisher extends Item {
         if (player.level.isClientSide) {
             shootParticle(player);
         } else {
-            if (player instanceof ServerPlayer) {
-                ServerPlayer serverPlayer = (ServerPlayer) player;
+            if (player instanceof ServerPlayer serverPlayer) {
                 Vec3 from = serverPlayer.getEyePosition();
                 Vec3 extend = player.getViewVector(1).scale(6.5);
                 Vec3 to = from.add(extend);
