@@ -52,7 +52,10 @@ public class FireEventListener {
             Iterator<BlockPos> iterator = fires.iterator();
             while (iterator.hasNext()) {
                 BlockPos firePos = iterator.next();
-                if (level.isLoaded(firePos) && FireHelper.isFire(level.getBlockState(firePos))) {
+                if(!level.isLoaded(firePos)){
+                    continue;
+                }
+                if (FireHelper.isFire(level.getBlockState(firePos))) {
                     if (FireManager.fire(level, firePos)) {
                         iterator.remove();
                     }
