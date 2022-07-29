@@ -47,18 +47,10 @@ public class FireEventListener {
         Level level = event.world;
         LinkedHashSet<BlockPos> fires = FireManager.getFireBuffer().get(level);
         if (fires != null) {
-            if (fires.size() > 200) {
-                LogManager.getLogger().warn("Fire buffer is too big in world "
-                        + level.toString()
-                        + " | "
-                        + level.dimension());
-                blockPosWarn(fires);
-            }
             long mill = System.currentTimeMillis();
             Iterator<BlockPos> iterator = fires.iterator();
             while (iterator.hasNext()) {
                 if (System.currentTimeMillis() > mill + 5) {
-                    LogManager.getLogger().warn("Checking fire buffer is too slow, costing more than 5 ms, skipping remaining fires...");
                     blockPosWarn(fires);
                     break;
                 }
@@ -81,6 +73,7 @@ public class FireEventListener {
         Logger logger = LogManager.getLogger();
         try{
             BlockPos randomPos = fires.toArray(new BlockPos[0])[(int) (fires.size() * Math.random())];
+            logger.warn("Checking fire buffer takes to long, costing more than 5 ms, skipping remaining fires...");
             logger.warn("Here is more information about the warn above:");
             logger.warn("Fire buffer's length is "+fires.size()+" .");
             logger.warn("Here is a block randomly chosen from fire buffer.You can check this block at "+randomPos.toShortString()+" in chunk "+(new ChunkPos(randomPos)).toString());
