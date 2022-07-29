@@ -42,7 +42,7 @@ public class FireEventListener {
             checkFireBufferOnServerTick(event);
         }
     }
-
+    static WeakHashMap<Level, Long> lastWarnTickMap = new WeakHashMap<>();
     private static void checkFireBufferOnServerTick(TickEvent.WorldTickEvent event) {
         Level level = event.world;
         LinkedHashSet<BlockPos> fires = FireManager.getFireBuffer().get(level);
@@ -51,7 +51,12 @@ public class FireEventListener {
             Iterator<BlockPos> iterator = fires.iterator();
             while (iterator.hasNext()) {
                 if (System.currentTimeMillis() > mill + 5) {
-                    blockPosWarn(fires);
+                    long tick = level.getGameTime();
+                    long lastWarnTick = lastWarnTickMap.getOrDefault(level, 0L);
+                    if (Math.abs(tick - lastWarnTick) >= 10) {
+                        lastWarnTickMap.put(level, tick);
+                        blockPosWarn(fires, level.getGameTime());
+                    }
                     break;
                 }
                 BlockPos firePos = iterator.next();
@@ -69,21 +74,24 @@ public class FireEventListener {
         }
     }
 
-    private static void blockPosWarn(LinkedHashSet<BlockPos> fires) {
+
+    private static void blockPosWarn(LinkedHashSet<BlockPos> fires, long tick) {
         Logger logger = LogManager.getLogger();
-        try{
+        try {
             BlockPos randomPos = fires.toArray(new BlockPos[0])[(int) (fires.size() * Math.random())];
             logger.warn("Checking fire buffer takes to long, costing more than 5 ms, skipping remaining fires...");
             logger.warn("Here is more information about the warn above:");
-            logger.warn("Fire buffer's length is "+fires.size()+" .");
-            logger.warn("Here is a block randomly chosen from fire buffer.You can check this block at "+randomPos.toShortString()+" in chunk "+(new ChunkPos(randomPos)).toString());
-        } catch (IndexOutOfBoundsException ignored){}
+            logger.warn("Fire buffer's length is " + fires.size() + " .");
+            logger.warn("Here is a block randomly chosen from fire buffer.You can check this block at " + randomPos.toShortString() + " in chunk " + (new ChunkPos(randomPos)).toString());
+
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
     @SubscribeEvent
     public static void removeLevel(WorldEvent.Unload event) {
         if (!event.getWorld().isClientSide()) {
-            FireManager.removeLevel((ServerLevel) event.getWorld());
+            FireManager.removeLevel((Level) event.getWorld());
         }
     }
 }

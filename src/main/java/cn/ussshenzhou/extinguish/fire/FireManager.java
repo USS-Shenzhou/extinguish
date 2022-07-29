@@ -101,7 +101,7 @@ public class FireManager {
         return autoWaterCannons;
     }
 
-    public static void removeLevel(ServerLevel level) {
+    public static void removeLevel(Level level) {
         autoWaterCannons.remove(level);
         fireBuffer.remove(level);
     }
