@@ -70,7 +70,7 @@ public class WaterSpoutParticle extends TextureSheetParticle {
             //Different client have different particle details.
             //Since particle does not exist on server, only shooter's client is the standard position to detect fire.
             //After every 5 ticks, particle has a certain chance to put out fire.
-            if (age % 5 == 0 && shooter.equals(Minecraft.getInstance().player.getUUID()) && random.nextFloat() < 0.06f) {
+            if (age % 5 == 0 && shooter.equals(Minecraft.getInstance().player.getUUID()) && random.nextFloat() < 0.05f) {
                 ModParticleHelper.putOut(new BlockPos(x, y, z));
             }
         }
