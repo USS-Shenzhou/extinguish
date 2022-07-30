@@ -29,11 +29,34 @@ public class FireEventListener {
     public static void detectFireBlock(BlockEvent.NeighborNotifyEvent event) {
         //NeighborNotifyEvent only called on server
         BlockState blockState = event.getState();
+        ServerLevel level = (ServerLevel) event.getWorld();
+        BlockPos firePos = event.getPos();
+        //------demo only------
+        if (willPass(firePos)) {
+            return;
+        }
+
         if (((Level) event.getWorld()).dimension() != Level.NETHER && FireHelper.isFire(blockState)) {
-            if (!FireManager.fire((ServerLevel) event.getWorld(), event.getPos())) {
-                FireManager.addFireToBuffer((ServerLevel) event.getWorld(), event.getPos());
+            if (!FireManager.fire(level, firePos)) {
+                FireManager.addFireToBuffer(level, firePos);
             }
         }
+    }
+
+    //------demo only------
+    //minX maxX minZ maxZ
+    static int[] passZone1 = {0, 70, 347, 398};
+    static int[] passZone2 = {418, 497, -65, 0};
+    private static boolean willPass(BlockPos blockPos) {
+        int x = blockPos.getX();
+        int z = blockPos.getZ();
+        if (x > passZone1[0] && x < passZone1[1] && z > passZone1[2] && z < passZone1[3]) {
+            return true;
+        }
+        if (x > passZone2[0] && x < passZone2[1] && z > passZone2[2] && z < passZone2[3]) {
+            return true;
+        }
+        return false;
     }
 
     @SubscribeEvent
@@ -42,7 +65,9 @@ public class FireEventListener {
             checkFireBufferOnServerTick(event);
         }
     }
+
     static WeakHashMap<Level, Long> lastWarnTickMap = new WeakHashMap<>();
+
     private static void checkFireBufferOnServerTick(TickEvent.WorldTickEvent event) {
         Level level = event.world;
         LinkedHashSet<BlockPos> fires = FireManager.getFireBuffer().get(level);
