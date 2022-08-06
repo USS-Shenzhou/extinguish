@@ -1,6 +1,7 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -141,7 +142,9 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        stack.setDamageValue(stack.getDamageValue() + 1);
+        if (stack.isDamageableItem()){
+            stack.setDamageValue(stack.getDamageValue() + 1);
+        }
         if (player.level.isClientSide) {
             shootParticle(player);
         } else {
