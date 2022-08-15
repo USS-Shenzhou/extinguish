@@ -30,9 +30,9 @@ public class FireEventListener {
      */
     @SubscribeEvent
     public static void detectFireBlock(BlockEvent.NeighborNotifyEvent event) {
-        if (!event.getWorld().isClientSide()) {
+        if (event.getWorld() instanceof ServerLevel level) {
+            LogManager.getLogger().warn(event.getWorld().toString());
             BlockState blockState = event.getState();
-            ServerLevel level = (ServerLevel) event.getWorld();
             BlockPos firePos = event.getPos();
             //------demo only------
             if (willPass(firePos)) {
