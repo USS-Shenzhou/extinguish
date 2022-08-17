@@ -19,13 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("AlibabaAbstractClassShouldStartWithAbstractNaming")
 @Mixin(LevelRenderer.class)
 public abstract class LevelRendererMixin {
-    @Shadow
-    @Final
-    private Minecraft minecraft;
-
-    @Shadow
-    protected abstract ParticleStatus calculateParticleLevel(boolean pDecreased);
-
 
     /**
      * Change the max distance of particle spawn (32->64).
