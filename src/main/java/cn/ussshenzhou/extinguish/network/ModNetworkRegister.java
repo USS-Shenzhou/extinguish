@@ -11,7 +11,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ModNetworkRegister {
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(PutOutFirePackSend::registerMessage);
-        event.enqueueWork(PreciseParticlePackSend::registerMessage);
+        event.enqueueWork(() -> {
+            PutOutFirePackSend.registerMessage();
+            PreciseParticlePackSend.registerMessage();
+            ExtinguisherSoundPackSend.registerMessage();
+        });
     }
 }

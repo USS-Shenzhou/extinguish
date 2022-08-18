@@ -26,5 +26,8 @@
 
   "item.extinguish.demo_ash": "无火",
   "item.nocaet.demo_ash.clue": "在火焰停止跳动之后。",
-  "item.extinguish.tip.demo_ash": "火焰肆虐之后，只剩黑灰色中的点点红光。\n微弱的星点趁着风，忽闪着像小虫一样蜿蜒。\n小心，随时都有复燃的可能。"
+  "item.extinguish.tip.demo_ash": "火焰肆虐之后，只剩黑灰色中的点点红光。\n微弱的星点趁着风，忽闪着像小虫一样蜿蜒。\n小心，随时都有复燃的可能。",
+
+  "subtitle.extinguish.extinguisher_shoot": "灭火器：喷射",
+  "subtitle.extinguish.cannon_shoot": "自动消防水炮：喷射"
 }

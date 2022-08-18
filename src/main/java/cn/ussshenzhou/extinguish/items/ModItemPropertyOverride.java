@@ -1,4 +1,4 @@
-package cn.ussshenzhou.extinguish.util;
+package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.items.FireExtinguisherCo2;
 import cn.ussshenzhou.extinguish.items.FireExtinguisherDry;
@@ -21,7 +21,8 @@ public class ModItemPropertyOverride {
         event.enqueueWork(() -> {
             ItemProperties.register(ModItemRegistry.FIRE_EXTINGUISHER_CO2.get(), new ResourceLocation("using"), ((pStack, pLevel, pEntity, pSeed) -> {
                 return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherCo2 && pStack.getOrCreateTag().getBoolean("usingAnime") ? 1 : 0;
-                //return pEntity != null && pEntity.getUseItem() == pStack ? 1 : 0;
+                //glitch
+                //return pEntity != null && pEntity.isUsingItem() && pEntity.getUseItem() == pStack ? 1 : 0;
             }));
             ItemProperties.register(ModItemRegistry.FIRE_EXTINGUISHER_DRY.get(), new ResourceLocation("using"), ((pStack, pLevel, pEntity, pSeed) -> {
                 return pEntity != null && pEntity.getUseItem().getItem() instanceof FireExtinguisherDry && pStack.getOrCreateTag().getBoolean("usingAnime") ? 1 : 0;

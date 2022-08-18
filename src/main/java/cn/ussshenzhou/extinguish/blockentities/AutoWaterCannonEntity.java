@@ -1,8 +1,8 @@
 package cn.ussshenzhou.extinguish.blockentities;
 
-import cn.ussshenzhou.extinguish.fire.FireEventListener;
 import cn.ussshenzhou.extinguish.fire.FireHelper;
 import cn.ussshenzhou.extinguish.fire.FireManager;
+import cn.ussshenzhou.extinguish.mixin.LevelRendererMixin;
 import cn.ussshenzhou.extinguish.network.PreciseParticlePack;
 import cn.ussshenzhou.extinguish.network.PreciseParticlePackSend;
 import cn.ussshenzhou.extinguish.particles.WaterSpoutParticleOption;
@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
-import org.apache.logging.log4j.LogManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
@@ -51,7 +50,7 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
     private static final float MAX_SPEED = 1.5f;
     private static final float MIN_SPEED = 0.3f;
     private static final float MAX_DIFFUSE = 0.13f;
-    private static final float MIN_DIFFUSE = 0.03f;
+    private static final float MIN_DIFFUSE = 0.02f;
     private static final float MAX_PITCH_RATE = (float) Math.toRadians(2);
     private static final float MAX_YAW_RATE = (float) Math.toRadians(3);
     private static final int MAX_RANGE = 16;
@@ -110,7 +109,7 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
     /**
      * The player-seeking distance depends on:
      *
-     * @see cn.ussshenzhou.extinguish.mixin.MixinLevelRenderer#mixinAddParticleInternal(ParticleOptions, boolean, boolean, double, double, double, double, double, double, CallbackInfoReturnable)
+     * @see LevelRendererMixin#mixinAddParticleInternal(ParticleOptions, boolean, boolean, double, double, double, double, double, double, CallbackInfoReturnable)
      */
     private void shootWater() {
         ServerLevel serverLevel = (ServerLevel) this.level;

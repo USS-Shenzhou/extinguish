@@ -1,16 +1,20 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
-import net.minecraft.nbt.CompoundTag;
+import cn.ussshenzhou.extinguish.mixin.SoundManagerAccessor;
+import cn.ussshenzhou.extinguish.network.*;
+import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
+import cn.ussshenzhou.extinguish.sounds.SoundHelper;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import cn.ussshenzhou.extinguish.sounds.MovableSoundInstance;
+import cn.ussshenzhou.extinguish.sounds.FollowingSoundInstance;
 import cn.ussshenzhou.extinguish.util.ModItemGroups;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -30,6 +34,9 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,8 +50,8 @@ public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
     private static final Predicate<Entity> ALL_BUT_SPECTATOR = entity -> !entity.isSpectator();
     private static final double INTERACT_DISTANCE = 7;
-
-    MovableSoundInstance soundInstanceBuffer = null;
+    final int id = (int) (Math.random() * 10000);
+    public static final String TAG_USING = "usingAnime";
 
     public AbstractFireExtinguisher(int maxTime) {
         super(new Properties()
@@ -53,28 +60,6 @@ public abstract class AbstractFireExtinguisher extends Item {
                 .durability(maxTime)
         );
         this.maxTime = maxTime;
-    }
-
-    /*@Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
-        if (!pPlayer.level.isClientSide() && pInteractionTarget instanceof Blaze) {
-            this.interactWithBlaze(pStack, pPlayer, (Blaze) pInteractionTarget);
-        }
-        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
-    }*/
-
-    @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
-        ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-        if (stack.getDamageValue() < maxTime - 1) {
-            pPlayer.startUsingItem(pUsedHand);
-            stack.getOrCreateTag().putBoolean("usingAnime", true);
-            if (pLevel.isClientSide) {
-                startSound(pLevel, pPlayer);
-            }
-            return InteractionResultHolder.consume(stack);
-        }
-        return InteractionResultHolder.fail(stack);
     }
 
     @Override
@@ -86,41 +71,69 @@ public abstract class AbstractFireExtinguisher extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
-        pStack.getOrCreateTag().putBoolean("usingAnime", false);
-        if (pLevel.isClientSide) {
-            stopSound(pLevel);
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
+        ItemStack stack = pPlayer.getItemInHand(pUsedHand);
+        if (stack.getDamageValue() < maxTime - 1) {
+            pPlayer.startUsingItem(pUsedHand);
+            stack.getOrCreateTag().putBoolean(TAG_USING, true);
+            if (!pLevel.isClientSide) {
+                int slot = pPlayer.getInventory().findSlotMatchingItem(stack);
+                if (slot == -1 && pUsedHand == InteractionHand.OFF_HAND) {
+                    slot = -106;
+                }
+                if (slot != -1) {
+                    setServerSound((ServerLevel) pLevel, pPlayer, true, slot);
+                }
+            } else {
+                playClientSound(pLevel, pPlayer);
+            }
+            return InteractionResultHolder.consume(stack);
         }
-        super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
+        return InteractionResultHolder.fail(stack);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        pStack.getOrCreateTag().putBoolean("usingAnime", false);
-        if (pLevel.isClientSide) {
-            stopSound(pLevel);
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+        if (pLevel.isClientSide && pEntity instanceof Player owner) {
+            soundClientCheck(pStack, pLevel, owner, pSlotId, pIsSelected);
         }
-        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 
     @OnlyIn(Dist.CLIENT)
-    abstract protected void startSound(Level pLevel, Player pPlayer);
+    private void soundClientCheck(ItemStack pStack, Level pLevel, Player owner, int pSlotId, boolean pIsSelected) {
+        Player player = Minecraft.getInstance().player;
+        if (player != null
+                && owner.getUUID().equals(player.getUUID())
+                && pStack.getOrCreateTag().getBoolean(TAG_USING)
+                && pSlotId != owner.getInventory().findSlotMatchingItem(owner.getUseItem())
+        ) {
+            LogManager.getLogger().warn(pSlotId + "   " + owner.getInventory().findSlotMatchingItem(owner.getUseItem()));
+            ExtinguisherSoundPackSend.channel.sendToServer(new ExtinguisherSoundPack(owner.getUUID(), false, pSlotId));
+            this.stopClientSound(owner);
+        }
+    }
+
+    public static void setServerSound(ServerLevel level, Player player, boolean start, int slot) {
+        for (ServerPlayer p : level.getPlayers(ServerPlayer::isAlive)) {
+            if (p.getUUID().equals(player.getUUID())) {
+                continue;
+            }
+            ExtinguisherSoundPackSend.channel.send(
+                    PacketDistributor.PLAYER.with(() -> p), new ExtinguisherSoundPack(player.getUUID(), start, slot)
+            );
+        }
+    }
 
     @OnlyIn(Dist.CLIENT)
-    private void stopSound(Level level) {
-        if (level.isClientSide && soundInstanceBuffer != null) {
-            Minecraft.getInstance().getSoundManager().stop(soundInstanceBuffer);
-            soundInstanceBuffer = null;
-        }
+    abstract public void playClientSound(Level pLevel, Player pPlayer);
+
+    @OnlyIn(Dist.CLIENT)
+    public void stopClientSound(Player player) {
+        SoundHelper.stopFollowingSound(player, getShootSound().getLocation(), SoundSource.PLAYERS);
     }
 
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        if (slotChanged) {
-            oldStack.getOrCreateTag().putBoolean("usingAnime", false);
-        }
-        return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
-    }
+    public abstract SoundEvent getShootSound();
 
     @Override
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack pStack) {
@@ -142,7 +155,7 @@ public abstract class AbstractFireExtinguisher extends Item {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (stack.isDamageableItem()){
+        if (stack.isDamageableItem()) {
             stack.setDamageValue(stack.getDamageValue() + 1);
         }
         if (player.level.isClientSide) {
@@ -180,13 +193,13 @@ public abstract class AbstractFireExtinguisher extends Item {
                 interactWithBlaze((Blaze) interactBuffer);
             } else if (interactBuffer instanceof Player) {
                 interactWithPlayer((Player) interactBuffer);
-            } else {
-                interactWithOtherEntity(interactBuffer);
+            } else if (interactBuffer instanceof LivingEntity){
+                interactWithOtherEntity((LivingEntity) interactBuffer);
             }
         }
     }
 
-    protected abstract void interactWithOtherEntity(Entity entity);
+    protected abstract void interactWithOtherEntity(LivingEntity entity);
 
     protected void interactWithPlayer(Player player) {
         interactWithOtherEntity(player);
@@ -221,6 +234,7 @@ public abstract class AbstractFireExtinguisher extends Item {
     }
 
     Vec3 getNozzlePosInWorld(LivingEntity player, float tubeLengthIn16, float leftOrRightOffsetIn16) {
+        //TODO leftHand and offHand
         //get shoulder position in world-coordinates.
         LivingEntityRenderer<?, ?> livingEntityRenderer = (LivingEntityRenderer<?, ?>) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
         HumanoidModel<?> playerModel = ((PlayerRenderer) livingEntityRenderer).getModel();

@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.extinguish.refmap.json",
   "mixins": [
+    "SoundManagerAccessor"
   ],
   "client": [
-    "MixinLevelRenderer"
+    "LevelRendererMixin",
+    "SoundEngineAccessor"
   ]
 }

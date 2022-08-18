@@ -11,25 +11,16 @@ import net.minecraft.world.phys.Vec3;
 /**
  * @author USS_Shenzhou
  */
-public class MovableSoundInstance extends SimpleSoundInstance implements TickableSoundInstance {
+public class FollowingSoundInstance extends SimpleSoundInstance implements TickableSoundInstance {
     private Player player;
 
-    public MovableSoundInstance(Player player, SoundEvent pSoundEvent, SoundSource pSource, float pVolume, float pPitch, double pX, double pY, double pZ) {
+    public FollowingSoundInstance(Player player, SoundEvent pSoundEvent, SoundSource pSource, float pVolume, float pPitch, double pX, double pY, double pZ) {
         super(pSoundEvent, pSource, pVolume, pPitch, pX, pY, pZ);
         this.player = player;
     }
 
-    @Deprecated
-    public void setPos(Vec3 vec3){
-        this.x = vec3.x;
-        this.y = vec3.y;
-        this.z = vec3.z;
-    }
-    @Deprecated
-    public void setPos(double x,double y,double z){
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Player getPlayer() {
+        return player;
     }
 
     @Override
@@ -42,5 +33,15 @@ public class MovableSoundInstance extends SimpleSoundInstance implements Tickabl
         this.x = player.getX();
         this.y = player.getY();
         this.z = player.getZ();
+    }
+
+    @Override
+    public int hashCode() {
+        return player.hashCode() + sound.getLocation().hashCode() + (int) (volume * 1000 + pitch * 1000);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

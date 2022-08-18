@@ -26,5 +26,8 @@
 
   "item.extinguish.demo_ash": "Extinguished Fire",
   "item.nocaet.demo_ash.clue": "After fire extinguished.",
-  "item.extinguish.tip.demo_ash": "Fire. Spark. Ash."
+  "item.extinguish.tip.demo_ash": "Fire. Spark. Ash.",
+
+  "subtitle.extinguish.extinguisher_shoot": "Extinguisher shoots",
+  "subtitle.extinguish.cannon_shoot": "Auto Water Cannon shoots"
 }

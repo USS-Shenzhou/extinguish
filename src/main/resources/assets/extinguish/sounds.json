@@ -4,7 +4,8 @@
     "sounds": [
       {
         "name": "extinguish:co2_shoot"
-      }]
+      }],
+    "subtitle": "subtitle.extinguish.extinguisher_shoot"
   },
   "co2_start": {
     "replace": true,
@@ -18,7 +19,8 @@
     "sounds": [
       {
         "name": "extinguish:dry_shoot"
-      }]
+      }],
+    "subtitle": "subtitle.extinguish.extinguisher_shoot"
   },
   "dry_start": {
     "replace": true,
@@ -32,6 +34,7 @@
     "sounds": [
       {
         "name": "extinguish:cannon_shoot"
-      }]
+      }],
+    "subtitle": "subtitle.extinguish.cannon_shoot"
   }
 }
