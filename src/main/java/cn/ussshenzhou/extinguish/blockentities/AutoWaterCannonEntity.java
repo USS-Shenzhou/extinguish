@@ -82,12 +82,12 @@ public class AutoWaterCannonEntity extends BlockEntity implements ISyncFromServe
                 //start
                 thisEntity.shootTicker = 0;
                 level.playSound(null, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, ModSoundsRegistry.CANNON_SHOOT.get(), SoundSource.BLOCKS, 1, 1);
-            } else if (thisEntity.shootTicker > SHOOT_TIME) {
-                //end
-                thisEntity.shootTicker = -1;
                 if (thisEntity.unattended) {
                     FireHelper.putOut(level, level.getBlockState(thisEntity.target), thisEntity.target, null);
                 }
+            } else if (thisEntity.shootTicker > SHOOT_TIME) {
+                //end
+                thisEntity.shootTicker = -1;
                 //thisEntity.pitchGoal = 0;
                 //thisEntity.yawGoal = 0;
                 thisEntity.target = null;

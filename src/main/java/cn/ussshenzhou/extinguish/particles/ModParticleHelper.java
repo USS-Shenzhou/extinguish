@@ -26,7 +26,7 @@ public class ModParticleHelper {
         float a = (float) Math.random() * r * (random.nextBoolean() ? -1 : 1);
         float b = (float) Math.sqrt(r2 - a * a) * (random.nextBoolean() ? -1 : 1);
         //lose energy/speed when bouncing to different directions.
-        //lose less speed when going forward. lose less speed when going backward.
+        //lose less speed when going forward. lose more speed when going backward.
         float d = (float) Math.sqrt((d1 - a) * (d1 - a) + (d2 - b) * (d2 - b));
         float directionalLoss = 1 - d / (2 * r) * maxDirectionalLoss;
         return new Vec2((float) (a * directionalLoss * Math.random()), (float) (b * directionalLoss * Math.random()));

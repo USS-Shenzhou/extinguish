@@ -1,6 +1,6 @@
 package cn.ussshenzhou.extinguish.blockentities;
 
-import cn.ussshenzhou.extinguish.render.RawQuad;
+import cn.ussshenzhou.t88.render.RawQuad;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -19,7 +19,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -31,7 +30,7 @@ import java.util.Random;
  * @author USS_Shenzhou
  */
 public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleEntity {
-    private BlockState blockState = Blocks.AIR.defaultBlockState();
+    private BlockState disguiseBlockState = Blocks.AIR.defaultBlockState();
     private BakedModel disguiseModel;
 
     public ExtinguisherBracketBuiltinEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
@@ -45,24 +44,22 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        pTag.put("disguise", NbtUtils.writeBlockState(blockState));
+        pTag.put("disguise", NbtUtils.writeBlockState(disguiseBlockState));
     }
 
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag compoundTag = super.getUpdateTag();
-        compoundTag.put("disguise", NbtUtils.writeBlockState(blockState));
+        compoundTag.put("disguise", NbtUtils.writeBlockState(disguiseBlockState));
         return compoundTag;
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        this.blockState = NbtUtils.readBlockState(pTag.getCompound("disguise"));
-        if (level==null){
-            needSync = true;
-        } else if (level.isClientSide){
-            setDisguise(blockState);
+        this.disguiseBlockState = NbtUtils.readBlockState(pTag.getCompound("disguise"));
+        if (level != null && level.isClientSide) {
+            setDisguise(disguiseBlockState);
         }
     }
 
@@ -70,7 +67,14 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
         thisEntity.syncTick();
     }
 
-    boolean needSync = false;
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && !level.isClientSide) {
+            syncFromServer(level,this);
+        }
+    }
+    boolean needSync = true;
 
     void syncTick() {
         if (needSync) {
@@ -80,26 +84,26 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
     }
 
     public void setDisguise(BlockState disguiseState) {
-        blockState = disguiseState;
+        disguiseBlockState = disguiseState;
         if (level.isClientSide) {
-            calculateDisguiseModel(disguiseState);
+            calculateDisguiseModel();
         }
         syncFromServer(level, this);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void calculateDisguiseModel(BlockState blockState) {
+    public void calculateDisguiseModel() {
         Direction direction = this.getBlockState().getValue(BlockStateProperties.FACING);
-        BakedModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+        BakedModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(disguiseBlockState);
         List<BakedQuad> quadList = new ArrayList<>();
         for (Direction d : Direction.values()) {
             if (d == direction) {
                 continue;
             }
             Random r = new Random(42L);
-            quadList.addAll(blockModel.getQuads(blockState, d, r, EmptyModelData.INSTANCE));
+            quadList.addAll(blockModel.getQuads(disguiseBlockState, d, r, EmptyModelData.INSTANCE));
         }
-        List<BakedQuad> l = blockModel.getQuads(blockState, direction, new Random(), EmptyModelData.INSTANCE);
+        List<BakedQuad> l = blockModel.getQuads(disguiseBlockState, direction, new Random(), EmptyModelData.INSTANCE);
         for (BakedQuad b : l) {
             RawQuad rawQuad = new RawQuad(b);
             quadList.add(rawQuad.shrink(0, 15, 0, 0).bake());
@@ -158,7 +162,7 @@ public class ExtinguisherBracketBuiltinEntity extends ExtinguisherBracketDoubleE
     }
 
     public BlockState getDisguiseBlockState() {
-        return blockState;
+        return disguiseBlockState;
     }
 
 }

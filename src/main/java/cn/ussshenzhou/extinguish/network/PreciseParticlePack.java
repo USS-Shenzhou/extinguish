@@ -1,19 +1,13 @@
 package cn.ussshenzhou.extinguish.network;
 
-import cn.ussshenzhou.extinguish.fire.FireHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -98,7 +92,7 @@ public class PreciseParticlePack {
     private void clientHandler(){
         //Level level = LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT).get();
         Level level = Minecraft.getInstance().level;
-        Random r = new Random(42L);
+        Random r = level.random;
         for (int i = 0; i < count; i++) {
             level.addParticle(
                     particleOption,

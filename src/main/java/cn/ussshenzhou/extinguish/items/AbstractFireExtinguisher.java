@@ -1,20 +1,9 @@
 package cn.ussshenzhou.extinguish.items;
 
 import cn.ussshenzhou.extinguish.blocks.AbstractExtinguisherBracket;
-import cn.ussshenzhou.extinguish.mixin.SoundManagerAccessor;
-import cn.ussshenzhou.extinguish.network.*;
-import cn.ussshenzhou.extinguish.sounds.ModSoundsRegistry;
+import cn.ussshenzhou.extinguish.network.ExtinguisherSoundPack;
+import cn.ussshenzhou.extinguish.network.ExtinguisherSoundPackSend;
 import cn.ussshenzhou.extinguish.sounds.SoundHelper;
-import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.phys.EntityHitResult;
-
-import cn.ussshenzhou.extinguish.sounds.FollowingSoundInstance;
 import cn.ussshenzhou.extinguish.util.ModItemGroups;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -22,22 +11,28 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.PacketDistributor;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -50,7 +45,6 @@ public abstract class AbstractFireExtinguisher extends Item {
     private final int maxTime;
     private static final Predicate<Entity> ALL_BUT_SPECTATOR = entity -> !entity.isSpectator();
     private static final double INTERACT_DISTANCE = 7;
-    final int id = (int) (Math.random() * 10000);
     public static final String TAG_USING = "usingAnime";
 
     public AbstractFireExtinguisher(int maxTime) {
@@ -108,7 +102,6 @@ public abstract class AbstractFireExtinguisher extends Item {
                 && pStack.getOrCreateTag().getBoolean(TAG_USING)
                 && pSlotId != owner.getInventory().findSlotMatchingItem(owner.getUseItem())
         ) {
-            LogManager.getLogger().warn(pSlotId + "   " + owner.getInventory().findSlotMatchingItem(owner.getUseItem()));
             ExtinguisherSoundPackSend.channel.sendToServer(new ExtinguisherSoundPack(owner.getUUID(), false, pSlotId));
             this.stopClientSound(owner);
         }

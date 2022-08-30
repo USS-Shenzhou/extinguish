@@ -20,11 +20,12 @@ apply plugin: 'org.spongepowered.mixin'
 
 group = 'cn.ussshenzhou'
 //also change in mods.toml
-version = '0.1.10.tc'
+version = '0.1.11.tc'
 
 java {
     archivesBaseName = 'extinguish'
     toolchain.languageVersion = JavaLanguageVersion.of(17)
+    //withSourcesJar()
 }
 
 minecraft {
@@ -149,13 +150,10 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
 }
 
 dependencies {
@@ -173,9 +171,7 @@ dependencies {
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation fg.deobf("curse.maven:t88-663112:3944567-sources-3944568")
 }
 mixin {
     add sourceSets.main, 'mixins.extinguish.refmap.json'
