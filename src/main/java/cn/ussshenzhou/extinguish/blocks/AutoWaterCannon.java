@@ -33,8 +33,9 @@ public class AutoWaterCannon extends BaseEntityBlock {
         super(
                 Properties.of(Material.METAL)
                         .noOcclusion()
-                        .strength(1, 5)
+                        .strength(6, 5)
                         .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops()
         );
         this.registerDefaultState(this.getStateDefinition().any().setValue(BlockStateProperties.FACING, Direction.DOWN));
     }

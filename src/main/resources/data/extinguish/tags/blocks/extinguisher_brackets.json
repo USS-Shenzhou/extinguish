@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "extinguish:extinguisher_bracket_builtin",
+    "extinguish:extinguisher_bracket_single",
+    "extinguish:extinguisher_bracket_double"
+  ]
+}

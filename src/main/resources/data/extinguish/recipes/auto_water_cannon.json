@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "EBE",
+    "CA "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:dispenser"
+    },
+    "B": {
+      "item": "minecraft:hopper"
+    },
+    "C": {
+      "item": "minecraft:observer"
+    },
+    "D": {
+      "item": "minecraft:stone"
+    },
+    "E": {
+      "item": "redstone_torch"
+    }
+  },
+  "result": {
+    "item": "extinguish:auto_water_cannon",
+    "count": 1
+  }
+}

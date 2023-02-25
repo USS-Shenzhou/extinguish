@@ -3,6 +3,7 @@
   "item.extinguish.extinguisher_co2": "Extinguisher (CO2)",
   "item.extinguish.extinguisher_water": "Extinguisher (water)",
   "item.extinguish.extinguisher_dry": "Extinguisher (dry chemical)",
+  "item.extinguish.empty_extinguisher_jar": "Raw Extinguisher Jar",
 
   "block.extinguish.extinguisher_bracket_single": "Extinguisher Bracket (single)",
   "block.extinguish.extinguisher_bracket_double": "Extinguisher Bracket (double)",
@@ -16,17 +17,10 @@
   "warn.extinguish.optifine": "§6§nExtinguish§r§f is not compatible with §6§nOptifine.§f Strongly recommend removing Optifine. §rYou can also proceed with NO warranty.",
   "warn.extinguish.particle": "§6§nExtinguish§r§f functioning depends on particle effects. It is highly recommended adjusting the particle effect to DECREASED or ALL",
 
-  "block.extinguish.demo_oak_planks": "Oak Planks (demo.)",
-  "block.extinguish.demo_extinguisher_bracket_single": "Extinguisher Bracket (single) (demo.)",
-  "block.extinguish.demo_extinguisher_bracket_double": "Extinguisher Bracket (double) (demo.)",
-  "block.extinguish.demo_extinguisher_bracket_builtin": "Embedded Extinguisher Cabinet (demo.)",
-  "item.extinguish.tip.demo_oak_planks": "Flammable but not burn-out-able.",
-  "item.extinguish.tip.demo": "Only for demonstration.",
-  "item.extinguish.tip.demo_bracket": "Infinite supply of extinguishers put in.",
-
   "item.extinguish.demo_ash": "Extinguished Fire",
   "item.nocaet.demo_ash.clue": "After fire extinguished.",
   "item.extinguish.tip.demo_ash": "Fire. Spark. Ash.",
+  "item.extinguish.tip.demo_ash.teacon": "In memory of Teacon 2022.",
 
   "subtitle.extinguish.extinguisher_shoot": "Extinguisher shoots",
   "subtitle.extinguish.cannon_shoot": "Auto Water Cannon shoots"

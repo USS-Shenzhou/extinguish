@@ -10,7 +10,6 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -68,7 +67,7 @@ public class Co2SmokeParticle extends TextureSheetParticle {
             //Since particle does not exist on server, only shooter's client is the standard position to detect fire.
             //After every 5 ticks, particle has a certain chance to put out fire.
             if (age % 4 == 0 && shooter.equals(Minecraft.getInstance().player.getUUID()) && random.nextFloat() < 0.07f) {
-                ModParticleHelper.putOut(new BlockPos(x, y, z), true);
+                ModParticleHelper.putOut(new BlockPos(x, y, z));
             }
         }
     }

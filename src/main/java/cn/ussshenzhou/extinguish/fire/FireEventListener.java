@@ -1,14 +1,11 @@
 package cn.ussshenzhou.extinguish.fire;
 
-import cn.ussshenzhou.extinguish.blockentities.AutoWaterCannonEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.TimeUtil;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,8 +14,9 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.WeakHashMap;
 
 /**
  * @author USS_Shenzhou
@@ -33,10 +31,10 @@ public class FireEventListener {
         if (event.getWorld() instanceof ServerLevel level) {
             BlockState blockState = event.getState();
             BlockPos firePos = event.getPos();
-            //------demo only------
-            if (willPass(firePos)) {
+
+            /*if (willPass(firePos)) {
                 return;
-            }
+            }*/
 
             if (level.dimension() != Level.NETHER && FireHelper.isFire(blockState)) {
                 if (!FireManager.fire(level, firePos)) {
@@ -46,22 +44,9 @@ public class FireEventListener {
         }
     }
 
-    //------demo only------
-    //minX maxX minZ maxZ
-    static int[] passZone1 = {0, 70, 347, 398};
-    static int[] passZone2 = {418, 497, -65, 0};
-
-    private static boolean willPass(BlockPos blockPos) {
-        int x = blockPos.getX();
-        int z = blockPos.getZ();
-        if (x > passZone1[0] && x < passZone1[1] && z > passZone1[2] && z < passZone1[3]) {
-            return true;
-        }
-        if (x > passZone2[0] && x < passZone2[1] && z > passZone2[2] && z < passZone2[3]) {
-            return true;
-        }
-        return false;
-    }
+    //TODO: let player be able to add exception zone
+    /*private static boolean willPass(BlockPos blockPos) {
+    }*/
 
     @SubscribeEvent
     public static void onLevelTick(TickEvent.WorldTickEvent event) {

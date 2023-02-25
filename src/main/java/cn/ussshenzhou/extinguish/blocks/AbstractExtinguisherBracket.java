@@ -1,5 +1,7 @@
 package cn.ussshenzhou.extinguish.blocks;
 
+import cn.ussshenzhou.extinguish.blockentities.AbstractExtinguisherBracketEntity;
+import cn.ussshenzhou.extinguish.items.AbstractFireExtinguisher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +16,6 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -22,8 +23,6 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import cn.ussshenzhou.extinguish.blockentities.AbstractExtinguisherBracketEntity;
-import cn.ussshenzhou.extinguish.items.AbstractFireExtinguisher;
 
 /**
  * @author USS_Shenzhou
@@ -35,8 +34,9 @@ public abstract class AbstractExtinguisherBracket extends BaseEntityBlock {
         super(
                 Properties.of(Material.METAL)
                         .noOcclusion()
-                        .strength(1, 5)
+                        .strength(5, 6)
                         .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops()
         );
         this.registerDefaultState(this.getStateDefinition().any().setValue(direction, Direction.NORTH));
     }

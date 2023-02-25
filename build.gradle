@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 group = 'cn.ussshenzhou'
 //also change in mods.toml
-version = '0.1.11.tc'
+version = '0.2.0'
 
 java {
     archivesBaseName = 'extinguish'

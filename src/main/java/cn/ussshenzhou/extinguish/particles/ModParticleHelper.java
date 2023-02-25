@@ -1,14 +1,13 @@
 package cn.ussshenzhou.extinguish.particles;
 
+import cn.ussshenzhou.extinguish.fire.FireHelper;
 import cn.ussshenzhou.extinguish.network.PutOutFirePack;
 import cn.ussshenzhou.extinguish.network.PutOutFirePackSend;
-import cn.ussshenzhou.extinguish.fire.FireHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 
@@ -39,17 +38,13 @@ public class ModParticleHelper {
     /**
      * @see net.minecraft.world.entity.projectile.ThrownPotion#dowseFire(BlockPos)
      */
-    public static void putOut(BlockPos pos,boolean giveSpark) {
+    public static void putOut(BlockPos pos) {
         Level level = Minecraft.getInstance().level;
         BlockState blockState = level.getBlockState(pos);
         if (FireHelper.isFire(blockState)) {
             ResourceKey<Level> l = level.dimension();
             ResourceLocation resourceLocation = l.location();
-            PutOutFirePackSend.channel.sendToServer(new PutOutFirePack(pos, resourceLocation,giveSpark));
+            PutOutFirePackSend.channel.sendToServer(new PutOutFirePack(pos, resourceLocation));
         }
-    }
-    //------demo only------
-    public static void putOut(BlockPos pos){
-        putOut(pos,false);
     }
 }
